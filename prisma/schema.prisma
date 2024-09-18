@@ -22,7 +22,7 @@ model Session {
 
 model User {
   id          Int       @id @default(autoincrement())
-  name        String  @unique
+  username    String    @unique
   password    String
   folders     Folder[]
 }
@@ -30,7 +30,7 @@ model User {
 model Folder {
   id          Int       @id @default(autoincrement())
   name        String
-  user        User @relation(fields: [userId], references: [id])
+  user        User      @relation(fields: [userId], references: [id])
   userId      Int
   files       File[]
 }
