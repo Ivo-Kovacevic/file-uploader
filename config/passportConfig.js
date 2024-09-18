@@ -6,14 +6,16 @@ const db = require("../db/queries");
 passport.use(
     new LocalStrategy(async (username, password, done) => {
         try {
-            const user = await db.getUser(username);
-
             if (!user) {
-                return done(null, false, { messageUsername: "Incorrect username" });
+                return done(null, false, {
+                    messageUsername: "Incorrect username",
+                });
             }
             const match = await bcrypt.compare(password, user.password);
             if (!match) {
-                return done(null, false, { messagePassword: "Incorrect password" });
+                return done(null, false, {
+                    messagePassword: "Incorrect password",
+                });
             }
             return done(null, user);
         } catch (err) {

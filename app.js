@@ -28,8 +28,6 @@ app.use((req, res, next) => {
     next();
 });
 
-
-
 app.use("/", indexRouter);
 
 app.listen(PORT, () => console.log(`App is live at port ${PORT}`));
