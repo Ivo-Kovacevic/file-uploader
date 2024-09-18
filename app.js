@@ -4,6 +4,7 @@ const session = require("express-session");
 const passport = require("./config/passportConfig");
 const path = require("node:path");
 const indexRouter = require("./routes/indexRouter");
+const driveRouter = require("./routes/driveRouter");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -27,6 +28,8 @@ app.use((req, res, next) => {
     res.locals.currentUser = req.user;
     next();
 });
+
+app.use("/drive", driveRouter);
 
 app.use("/", indexRouter);
 

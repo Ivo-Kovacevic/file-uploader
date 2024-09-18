@@ -663,6 +663,10 @@ video {
   margin-bottom: 2rem;
 }
 
+.box-border {
+  box-sizing: border-box;
+}
+
 .inline-block {
   display: inline-block;
 }
@@ -685,6 +689,10 @@ video {
 
 .h-full {
   height: 100%;
+}
+
+.h-screen {
+  height: 100vh;
 }
 
 .w-full {
@@ -740,6 +748,10 @@ video {
   --tw-space-y-reverse: 0;
   margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse)));
   margin-bottom: calc(1rem * var(--tw-space-y-reverse));
+}
+
+.justify-self-end {
+  justify-self: end;
 }
 
 .rounded {
