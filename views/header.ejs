@@ -9,6 +9,12 @@
                     </span>
                 </a>
             </li>
+            <% if (locals.currentUser) { %>
+            <li class="group">
+                <a href="/drive">Open Drive</a>
+                <div class="border-b-2 border-blue-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200"></div>
+            </li>
+            <% } else { %>
             <li class="group">
                 <a href="/register">Register</a>
                 <div class="border-b-2 border-blue-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200"></div>
@@ -17,6 +23,7 @@
                 <a href="/login">Login</a>
                 <div class="border-b-2 border-blue-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200"></div>
             </li>
+            <% } %>
         </ul>
     </header>
 </div>

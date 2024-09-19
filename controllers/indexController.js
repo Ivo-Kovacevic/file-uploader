@@ -1,5 +1,6 @@
 const query = require("../db/queries");
 const bcrypt = require("bcryptjs");
+const passport = require("../config/passportConfig");
 const { validationResult } = require("express-validator");
 const { validateNewUser } = require("../validation/user-validation");
 
@@ -11,8 +12,25 @@ const loginGet = async (req, res) => {
     res.render("login");
 };
 
-const loginPost = async (req, res) => {
-    res.render("login");
+const loginPost = (req, res, next) => {
+    passport.authenticate("local", (err, user, info) => {
+        if (err) {
+            return next(err);
+        }
+        if (!user) {
+            return res.render("login", {
+                messageUsername: info.messageUsername,
+                messagePassword: info.messagePassword,
+                userData: req.body,
+            });
+        }
+        req.logIn(user, (err) => {
+            if (err) {
+                return next(err);
+            }
+            return res.redirect("/drive");
+        });
+    })(req, res, next);
 };
 
 const registerGet = async (req, res) => {
@@ -35,11 +53,12 @@ const registerPost = [
                     req.body.username,
                     hashedPassword
                 );
+                console.log(newUser);
                 req.logIn(newUser, (err) => {
                     if (err) {
                         return next(err);
                     }
-                    return res.redirect("/");
+                    return res.redirect("/drive");
                 });
             });
         } catch (err) {
@@ -48,10 +67,20 @@ const registerPost = [
     },
 ];
 
+const logoutGet = async (req, res, next) => {
+    req.logout((err) => {
+        if (err) {
+            return next(err);
+        }
+        res.redirect("/");
+    });
+};
+
 module.exports = {
     indexGet,
     loginGet,
     loginPost,
     registerGet,
     registerPost,
+    logoutGet,
 };

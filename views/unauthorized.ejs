@@ -13,10 +13,7 @@
     <%- include("header") %>
     <div class="container mx-auto px-4">
         <div class="my-64 flex flex-col items-center">
-            <h1 class="text-4xl md:text-6xl text-center">Store your files online</h1>
-            <a href="<%= locals.currentUser ? "drive" : "register" %>" class="m-4 px-8 py-2 border-2 border-blue-500 rounded-xl font-bold hover:bg-blue-500 hover:text-white transition duration-200">
-                <%= locals.currentUser ? "Open Drive" : "Get started" %>
-            </a>
+            <h1 class="text-4xl md:text-6xl text-center">You must be logged in to proceed</h1>
         </div>
     </div>
 </body>

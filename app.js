@@ -1,6 +1,8 @@
 require("dotenv").config();
 const express = require("express");
-const session = require("express-session");
+const expressSession = require("express-session");
+const { PrismaSessionStore } = require("@quixo3/prisma-session-store");
+const { PrismaClient } = require("@prisma/client");
 const passport = require("./config/passportConfig");
 const path = require("node:path");
 const indexRouter = require("./routes/indexRouter");
@@ -15,10 +17,18 @@ const assetsPath = path.join(__dirname, "public");
 app.use(express.static(assetsPath));
 
 app.use(
-    session({
-        secret: "cats",
-        resave: false,
-        saveUninitialized: false,
+    expressSession({
+        cookie: {
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+        },
+        secret: "a santa at nasa",
+        resave: true,
+        saveUninitialized: true,
+        store: new PrismaSessionStore(new PrismaClient(), {
+            checkPeriod: 2 * 60 * 1000,
+            dbRecordIdIsSessionId: true,
+            dbRecordIdFunction: undefined,
+        }),
     })
 );
 app.use(passport.session());
