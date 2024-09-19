@@ -9,6 +9,8 @@ const unauthorizedGet = async (req, res) => {
     res.render("unauthorized");
 };
 
+// Rest of routes
+
 module.exports = {
     unauthorizedGet,
     driveGet,
