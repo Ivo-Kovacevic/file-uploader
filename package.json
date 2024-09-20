@@ -5,7 +5,8 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "dev": "node --watch app.js",
-        "tailwind": "tailwindcss -i ./public/stylesheets/input.css -o ./public/stylesheets/output.css --config ./config/tailwind.config.js --watch"
+        "tailwind": "tailwindcss -i ./public/stylesheets/input.css -o ./public/stylesheets/output.css --config ./config/tailwind.config.js --watch",
+        "browser-sync": "browser-sync start --proxy 'http://localhost:3000' --files 'public/**/*.*' 'views/**/*.*'"
     },
     "keywords": [],
     "author": "",
