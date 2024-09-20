@@ -4,7 +4,7 @@ const expressSession = require("express-session");
 const { PrismaSessionStore } = require("@quixo3/prisma-session-store");
 const { PrismaClient } = require("@prisma/client");
 const passport = require("./config/passportConfig");
-const path = require("node:path");
+const path = require("path");
 const indexRouter = require("./routes/indexRouter");
 const driveRouter = require("./routes/driveRouter");
 
