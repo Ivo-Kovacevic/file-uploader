@@ -12,4 +12,6 @@ indexRouter.post("/register", indexController.registerPost);
 
 indexRouter.get("/logout", indexController.logoutGet);
 
+indexRouter.get("*", indexController.invalidPage);
+
 module.exports = indexRouter;

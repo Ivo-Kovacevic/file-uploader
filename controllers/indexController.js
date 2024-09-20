@@ -76,6 +76,10 @@ const logoutGet = async (req, res, next) => {
     });
 };
 
+const invalidPage = async (req, res) => {
+    res.render("invalidPage");
+};
+
 module.exports = {
     indexGet,
     loginGet,
@@ -83,4 +87,5 @@ module.exports = {
     registerGet,
     registerPost,
     logoutGet,
+    invalidPage,
 };
