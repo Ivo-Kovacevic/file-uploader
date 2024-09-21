@@ -10,6 +10,7 @@ driveRouter.use((req, res, next) => {
 });
 
 driveRouter.get("/", driveController.driveGet);
+driveRouter.post("/create-folder", driveController.createFolderPost);
 driveRouter.post("/upload", driveController.uploadFilePost);
 
 module.exports = driveRouter;

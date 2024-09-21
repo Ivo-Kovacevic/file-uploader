@@ -1,5 +1,5 @@
 const { validationResult } = require("express-validator");
-const { validateNewUser } = require("../validation/user-validation");
+const { validateNewFolder } = require("../validation/folder-validation");
 const upload = require("../config/multerConfig");
 const asyncHandler = require("express-async-handler");
 
@@ -11,8 +11,21 @@ const driveGet = asyncHandler(async (req, res) => {
     res.render("drive");
 });
 
+const createFolderPost = [
+    validateNewFolder,
+    asyncHandler(async (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).render("drive", {
+                errors: errors.array(),
+                folderName: req.body,
+            });
+        }
+    }),
+];
+
 const uploadFilePost = [
-    upload.single("uploadFile"),
+    upload.single("newFile"),
     asyncHandler(async (req, res, next) => {
         res.redirect("/drive");
     }),
@@ -21,5 +34,6 @@ const uploadFilePost = [
 module.exports = {
     unauthorizedGet,
     driveGet,
+    createFolderPost,
     uploadFilePost,
 };

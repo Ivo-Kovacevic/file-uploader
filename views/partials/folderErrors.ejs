@@ -1,0 +1,8 @@
+<% if (locals.errors) { %>
+    <% const usernameErrors = errors.filter(error => error.path === 'newFolder'); %>
+<% if (usernameErrors.length > 0) { %>
+        <% usernameErrors.forEach(error => { %>
+            <p class="text-red-700"><%= error.msg %></p>
+        <% }) %>
+    <% } %>
+<% } %>
