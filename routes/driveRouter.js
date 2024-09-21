@@ -9,19 +9,25 @@ driveRouter.use(async (req, res, next) => {
         return driveController.unauthorizedGet(req, res);
     }
 
-    // Add current folder contents to the request
+    // Add current folder contents and url path array to the request
     const pathArray = req.originalUrl.split("/").filter((item) => item !== "");
+    const subfoldersPathArray = [...pathArray];
+
     const [rootFolder] = req.user.folders.filter(
         (folder) => folder.userId === req.user.id && folder.parentId === null
     );
-    const currentFolder = await query.getFolderContent(rootFolder, pathArray);
+    const currentFolder = await query.getFolderContent(
+        rootFolder,
+        subfoldersPathArray
+    );
+    console.log(pathArray);
+
     if (pathArray[pathArray.length - 1] === "create-folder") {
         pathArray.pop();
     }
-    console.log(pathArray);
-
-    req.currentFolder = currentFolder;
     req.pathArray = pathArray;
+    req.currentFolder = currentFolder;
+
     next();
 });
 

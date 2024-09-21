@@ -8,6 +8,12 @@ const unauthorizedGet = asyncHandler(async (req, res) => {
     res.render("unauthorized");
 });
 
+const invalidGet = asyncHandler(async (req, res) => {
+    res.render("invalid", {
+        currentUrl: req.originalUrl,
+    });
+});
+
 const logoutGet = asyncHandler(async (req, res, next) => {
     req.logout((err) => {
         if (err) {
@@ -18,6 +24,11 @@ const logoutGet = asyncHandler(async (req, res, next) => {
 });
 
 const driveGet = asyncHandler(async (req, res) => {
+    if (req.currentFolder === null) {
+        return res.render("invalid", {
+            currentUrl: req.originalUrl,
+        });
+    }
     res.render("drive", {
         currentUrl: req.originalUrl,
         currentFolder: req.currentFolder,
@@ -41,7 +52,6 @@ const createFolderPost = [
         const newFolderName = req.body.newFolder;
         const userId = req.user.id;
         const parentFolderId = req.currentFolder.id;
-        req.pathArray.pop();
         const url = req.pathArray.join("/");
 
         await query.createNewFolder(newFolderName, userId, parentFolderId);
@@ -58,6 +68,7 @@ const uploadFilePost = [
 
 module.exports = {
     unauthorizedGet,
+    invalidGet,
     driveGet,
     createFolderPost,
     uploadFilePost,

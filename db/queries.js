@@ -88,21 +88,25 @@ exports.createNewFolder = async (newFolderName, userId, parentId) => {
     }
 };
 
-exports.getFolderContent = async (rootFolder, pathArray) => {
+exports.getFolderContent = async (rootFolder, subfoldersPathArray) => {
     try {
-        let currentFolder = rootFolder;
-        for (let i = 1; i <= pathArray.length; i++) {
-            const folderName = pathArray[i];
-            let folder = await prisma.folder.findUnique({
-                where: {
-                    id: currentFolder.id,
-                },
-                include: {
-                    subfolders: true,
-                },
-            });
-            currentFolder = folder;
-            const subfolder = folder.subfolders.find((subfolder) => {
+        // Get current folder with subfolders
+        let currentFolder = await prisma.folder.findUnique({
+            where: {
+                id: rootFolder.id,
+            },
+            include: {
+                subfolders: true,
+            },
+        });
+        // Shift array so first element is subfolder name and not root folder name
+        subfoldersPathArray.shift();
+        console.log(currentFolder);
+
+        for (let i = 0; i < subfoldersPathArray.length; i++) {
+            const folderName = subfoldersPathArray[i];
+
+            const subfolder = currentFolder.subfolders.find((subfolder) => {
                 return subfolder.name === folderName;
             });
             if (subfolder) {
@@ -112,10 +116,14 @@ exports.getFolderContent = async (rootFolder, pathArray) => {
                         id: subfolderId,
                         name: folderName,
                     },
+                    include: {
+                        subfolders: true,
+                    },
                 });
+            } else if (folderName && folderName !== "create-folder") {
+                return (currentFolder = null);
             }
         }
-
         return currentFolder;
     } catch (error) {
         console.error(error);

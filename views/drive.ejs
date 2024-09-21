@@ -15,9 +15,13 @@
         <!-- Root folder -->
         <div class="flex-1 p-8">
             <div class="text-xl">
+                <% if (locals.pathArray) { %>
+                <% let cumulativePath = ''; %>
                 <% locals.pathArray.forEach(folder => { %>
-                <a href="" class="hover:underline"> <%= folder %></a> <span class="px-4">/</span>
+                <% cumulativePath += folder + "/"; %>
+                <a href="/<%= cumulativePath %> " class="hover:underline"> <%= folder %></a> <span class="px-4">/</span>
                 <% }) %>
+                <% } %>
             </div>
             <div class="pt-8 h-min grid gap-4 grid-cols-[repeat(auto-fill,minmax(8rem,1fr))]">
                 <% if(locals.currentFolder) { %>
