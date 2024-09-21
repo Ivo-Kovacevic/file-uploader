@@ -13,15 +13,22 @@
     <div class="flex">
         <%- include("sidebar") %>
         <!-- Root folder -->
-        <div class="flex-1 p-8 h-min grid gap-4 grid-cols-[repeat(auto-fill,minmax(8rem,1fr))]">
-            <% if(locals.currentFolder) { %>
-            <% currentFolder.subfolders.forEach(subfolder => { %>
-            <a href="<%= currentUrl %>/<%= subfolder.name %> " class="flex flex-col justify-center items-center h-32 hover:bg-blue-300 border-2 border-white hover:border-blue-500">
-                <img src="/images/folder.webp" alt="" class="flex-1 h-16">
-                <%= subfolder.name %>
-            </a>
-            <% }) %>
-            <% } %>
+        <div class="flex-1 p-8">
+            <div class="text-xl">
+                <% locals.pathArray.forEach(folder => { %>
+                <a href="" class="hover:underline"> <%= folder %></a> <span class="px-4">/</span>
+                <% }) %>
+            </div>
+            <div class="pt-8 h-min grid gap-4 grid-cols-[repeat(auto-fill,minmax(8rem,1fr))]">
+                <% if(locals.currentFolder) { %>
+                <% currentFolder.subfolders.forEach(subfolder => { %>
+                <a href="<%= currentUrl %>/<%= subfolder.name %> " class="flex flex-col justify-center items-center h-32 hover:bg-blue-300 border-2 border-white hover:border-blue-500">
+                    <img src="/images/folder.webp" alt="" class="flex-1 h-16">
+                    <%= subfolder.name %>
+                </a>
+                <% }) %>
+                <% } %>
+            </div>
         </div>
     </div>
 </body>

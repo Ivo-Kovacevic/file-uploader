@@ -4,9 +4,10 @@
             <a href="/drive" class="flex items-center text-4xl font-bold">OnlyFiles</a>
         </li>
         <li>
-            <form action="/drive/create-folder" method="post" class="mb-8 p-1 flex flex-col rounded-xl text-black bg-white text-center">
+            <form action="<%= currentUrl %>/create-folder" method="post" class="mb-8 p-1 flex flex-col rounded-xl text-black bg-white text-center">
                 <label for="newFolder">Create new folder</label>
                 <input type="text" name="newFolder" id="newFolder" placeholder="Folder name" class="p-2 rounded-xl border-2 border-gray-400" value="<%= locals.folderName && folderName.newFolder ? folderName.newFolder : '' %>" required>
+                <input type="hidden" name="currentFolder" value="<%= locals.currentFolder ? currentFolder : '' %>">
                 <%- include("partials/folderErrors.ejs") %>
                 <button type="submit" class="mt-4 px-8 py-2 w-full border-2 text-white bg-blue-500 border-blue-500 rounded-xl font-bold hover:bg-blue-700 hover:border-blue-700">Create folder</button>
             </form>

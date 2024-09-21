@@ -18,16 +18,10 @@ const logoutGet = asyncHandler(async (req, res, next) => {
 });
 
 const driveGet = asyncHandler(async (req, res) => {
-    const pathArray = req.originalUrl.split("/").filter((item) => item !== "");
-    const [rootFolder] = req.user.folders.filter(
-        (folder) => folder.userId === req.user.id && folder.parentId === null
-    );
-
-    const currentFolder = await query.getFolderContent(rootFolder, pathArray);
-
     res.render("drive", {
         currentUrl: req.originalUrl,
-        currentFolder: currentFolder,
+        currentFolder: req.currentFolder,
+        pathArray: req.pathArray,
     });
 });
 
@@ -39,15 +33,19 @@ const createFolderPost = [
             return res.status(400).render("drive", {
                 errors: errors.array(),
                 folderName: req.body,
+                currentUrl: req.originalUrl,
+                currentFolder: req.currentFolder,
             });
         }
 
         const newFolderName = req.body.newFolder;
         const userId = req.user.id;
-        const parentFolderId = req.user.folders[0].id;
+        const parentFolderId = req.currentFolder.id;
+        req.pathArray.pop();
+        const url = req.pathArray.join("/");
 
         await query.createNewFolder(newFolderName, userId, parentFolderId);
-        res.redirect("/drive");
+        res.redirect(`/${url}`);
     }),
 ];
 
