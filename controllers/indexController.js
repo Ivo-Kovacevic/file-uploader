@@ -5,15 +5,15 @@ const { validationResult } = require("express-validator");
 const { validateNewUser } = require("../validation/user-validation");
 const asyncHandler = require("express-async-handler");
 
-const indexGet = asyncHandler(async (req, res) => {
+exports.indexGet = asyncHandler(async (req, res) => {
     res.render("index");
 });
 
-const loginGet = asyncHandler(async (req, res) => {
+exports.loginGet = asyncHandler(async (req, res) => {
     res.render("login");
 });
 
-const loginPost = (req, res, next) => {
+exports.loginPost = (req, res, next) => {
     passport.authenticate("local", (err, user, info) => {
         if (err) {
             return next(err);
@@ -34,11 +34,11 @@ const loginPost = (req, res, next) => {
     })(req, res, next);
 };
 
-const registerGet = asyncHandler(async (req, res) => {
+exports.registerGet = asyncHandler(async (req, res) => {
     res.render("register");
 });
 
-const registerPost = [
+exports.registerPost = [
     validateNewUser,
     asyncHandler(async (req, res, next) => {
         const errors = validationResult(req);
@@ -63,16 +63,3 @@ const registerPost = [
         });
     }),
 ];
-
-const invalidPage = asyncHandler(async (req, res) => {
-    res.render("invalidPage");
-});
-
-module.exports = {
-    indexGet,
-    loginGet,
-    loginPost,
-    registerGet,
-    registerPost,
-    invalidPage,
-};

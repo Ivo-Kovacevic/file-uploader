@@ -4,39 +4,39 @@ const { validateNewFolder } = require("../validation/folder-validation");
 const upload = require("../config/multerConfig");
 const asyncHandler = require("express-async-handler");
 
-const unauthorizedGet = asyncHandler(async (req, res) => {
-    res.render("unauthorized");
+exports.unauthorizedGet = asyncHandler(async (req, res) => {
+    return res.render("unauthorized");
 });
 
-const invalidGet = asyncHandler(async (req, res) => {
-    res.render("invalid", {
+exports.invalidGet = asyncHandler(async (req, res) => {
+    return res.render("invalid", {
         currentUrl: req.originalUrl,
     });
 });
 
-const logoutGet = asyncHandler(async (req, res, next) => {
+exports.logoutGet = asyncHandler(async (req, res, next) => {
     req.logout((err) => {
         if (err) {
             return next(err);
         }
-        res.redirect("/");
+        return res.redirect("/");
     });
 });
 
-const driveGet = asyncHandler(async (req, res) => {
+exports.driveGet = asyncHandler(async (req, res) => {
     if (req.currentFolder === null) {
         return res.render("invalid", {
             currentUrl: req.originalUrl,
         });
     }
-    res.render("drive", {
+    return res.render("drive", {
         currentUrl: req.originalUrl,
         currentFolder: req.currentFolder,
         pathArray: req.pathArray,
     });
 });
 
-const createFolderPost = [
+exports.createFolderPost = [
     validateNewFolder,
     asyncHandler(async (req, res, next) => {
         const errors = validationResult(req);
@@ -55,22 +55,13 @@ const createFolderPost = [
         const url = req.pathArray.join("/");
 
         await query.createNewFolder(newFolderName, userId, parentFolderId);
-        res.redirect(`/${url}`);
+        return res.redirect(`/${url}`);
     }),
 ];
 
-const uploadFilePost = [
+exports.uploadFilePost = [
     upload.single("newFile"),
     asyncHandler(async (req, res, next) => {
-        res.redirect("/drive");
+        return res.redirect("/drive");
     }),
 ];
-
-module.exports = {
-    unauthorizedGet,
-    invalidGet,
-    driveGet,
-    createFolderPost,
-    uploadFilePost,
-    logoutGet,
-};

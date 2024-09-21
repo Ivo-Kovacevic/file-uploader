@@ -101,7 +101,6 @@ exports.getFolderContent = async (rootFolder, subfoldersPathArray) => {
         });
         // Shift array so first element is subfolder name and not root folder name
         subfoldersPathArray.shift();
-        console.log(currentFolder);
 
         for (let i = 0; i < subfoldersPathArray.length; i++) {
             const folderName = subfoldersPathArray[i];

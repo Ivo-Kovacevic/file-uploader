@@ -669,6 +669,14 @@ video {
   height: 4rem;
 }
 
+.h-4 {
+  height: 1rem;
+}
+
+.max-h-4 {
+  max-height: 1rem;
+}
+
 .w-full {
   width: 100%;
 }
@@ -732,6 +740,14 @@ video {
 
 .justify-center {
   justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-around {
+  justify-content: space-around;
 }
 
 .gap-4 {
@@ -837,6 +853,14 @@ video {
   padding-top: 2rem;
 }
 
+.pl-4 {
+  padding-left: 1rem;
+}
+
+.pr-4 {
+  padding-right: 1rem;
+}
+
 .text-center {
   text-align: center;
 }
@@ -921,6 +945,10 @@ video {
 
 .duration-200 {
   transition-duration: 200ms;
+}
+
+.hover\:max-h-4:hover {
+  max-height: 1rem;
 }
 
 .hover\:border:hover {
