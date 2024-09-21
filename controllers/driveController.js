@@ -9,9 +9,7 @@ exports.unauthorizedGet = asyncHandler(async (req, res) => {
 });
 
 exports.invalidGet = asyncHandler(async (req, res) => {
-    return res.render("invalid", {
-        currentUrl: req.originalUrl,
-    });
+    return res.render("invalid");
 });
 
 exports.logoutGet = asyncHandler(async (req, res, next) => {
@@ -24,13 +22,12 @@ exports.logoutGet = asyncHandler(async (req, res, next) => {
 });
 
 exports.driveGet = asyncHandler(async (req, res) => {
+    // Render invalid page folder doesnt exist
     if (req.currentFolder === null) {
-        return res.render("invalid", {
-            currentUrl: req.originalUrl,
-        });
+        return res.render("invalid");
     }
+
     return res.render("drive", {
-        currentUrl: req.originalUrl,
         currentFolder: req.currentFolder,
         pathArray: req.pathArray,
     });
@@ -40,17 +37,20 @@ exports.createFolderPost = [
     validateNewFolder,
     asyncHandler(async (req, res, next) => {
         const errors = validationResult(req);
+        const url = req.pathArray.join("/");
+
+        // Redirect if folder validation fails
         if (!errors.isEmpty()) {
             req.flash("errors", errors.array());
             req.flash("folderName", req.body);
             req.flash("currentUrl", req.originalUrl);
+            return res.redirect(`/${url}`);
         }
 
+        // Create new folder if validation passes
         const newFolderName = req.body.newFolder;
         const userId = req.user.id;
         const parentFolderId = req.currentFolder.id;
-        const url = req.pathArray.join("/");
-
         const newFolder = await query.createNewFolder(
             newFolderName,
             userId,

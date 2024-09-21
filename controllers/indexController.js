@@ -63,3 +63,7 @@ exports.registerPost = [
         });
     }),
 ];
+
+exports.invalidPage = asyncHandler(async (req, res) => {
+    res.render("noPage");
+})

@@ -131,7 +131,7 @@ exports.getFolderContent = async (rootFolder, subfoldersPathArray) => {
                         subfolders: true,
                     },
                 });
-            } else if (folderName && folderName !== "create-folder") {
+            } else if (folderName) {
                 return (currentFolder = null);
             }
         }

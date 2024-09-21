@@ -11,6 +11,9 @@ driveRouter.use(async (req, res, next) => {
 
     // Add current folder contents and url path array to the request
     const pathArray = req.originalUrl.split("/").filter((item) => item !== "");
+    if (pathArray[pathArray.length - 1] === "create-folder") {
+        pathArray.pop();
+    }
     const subfoldersPathArray = [...pathArray];
 
     const [rootFolder] = req.user.folders.filter(
@@ -20,9 +23,6 @@ driveRouter.use(async (req, res, next) => {
         rootFolder,
         subfoldersPathArray
     );
-    if (pathArray[pathArray.length - 1] === "create-folder") {
-        pathArray.pop();
-    }
     req.pathArray = pathArray;
     req.currentFolder = currentFolder;
     next();

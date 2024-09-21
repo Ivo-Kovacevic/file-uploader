@@ -1,8 +1,5 @@
 <% if (flashMessages.errors) { %>
-<% const folderErrors = errors.filter(error => error.path === 'newFolder'); %>
-<% if (folderErrors.length > 0) { %>
-<% folderErrors.forEach(error => { %>
-<p class="text-red-700"><%= error.msg %></p>
-<% }) %>
-<% } %>
+    <% flashMessages.errors.forEach(error => { %>
+        <p class="text-red-700"><%= error.msg %></p>
+    <% }) %>
 <% } %>

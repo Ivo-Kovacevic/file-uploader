@@ -36,6 +36,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(flash());
 app.use((req, res, next) => {
     res.locals.currentUser = req.user;
+    currentUrl = req.originalUrl;
     res.locals.flashMessages = req.flash();
     next();
 });
