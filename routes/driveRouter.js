@@ -9,8 +9,11 @@ driveRouter.use((req, res, next) => {
     next();
 });
 
-driveRouter.get("/", driveController.driveGet);
+driveRouter.get("/logout", driveController.logoutGet);
+
 driveRouter.post("/create-folder", driveController.createFolderPost);
 driveRouter.post("/upload", driveController.uploadFilePost);
+driveRouter.get("/*", driveController.driveGet);
+// driveRouter.get("/*", driveController.foldersGet);
 
 module.exports = driveRouter;

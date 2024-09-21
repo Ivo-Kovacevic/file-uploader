@@ -64,15 +64,6 @@ const registerPost = [
     }),
 ];
 
-const logoutGet = asyncHandler(async (req, res, next) => {
-    req.logout((err) => {
-        if (err) {
-            return next(err);
-        }
-        res.redirect("/");
-    });
-});
-
 const invalidPage = asyncHandler(async (req, res) => {
     res.render("invalidPage");
 });
@@ -83,6 +74,5 @@ module.exports = {
     loginPost,
     registerGet,
     registerPost,
-    logoutGet,
     invalidPage,
 };

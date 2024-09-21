@@ -12,14 +12,16 @@
 <body>
     <div class="flex">
         <%- include("sidebar") %>
-        <!-- Root folder -->
+        <!-- Rest of the folders -->
         <div class="flex-1 p-8 h-min grid gap-4 grid-cols-[repeat(auto-fill,minmax(8rem,1fr))]">
-            <% if(locals.currentFolder) { %>
-            <% currentFolder.subfolders.forEach(subfolder => { %>
-            <a href="<%= currentUrl %>/<%= subfolder.name %> " class="flex flex-col justify-center items-center h-32 hover:bg-blue-300 border-2 border-white hover:border-blue-500">
+            <% if(locals.currentUser.folders) { %>
+            <% currentUser.folders.forEach(folder => { %>
+            <% if (folder.parentId === 1) { %>
+            <a href="<%= currentUrl %>/<%= folder.name %> " class="flex flex-col justify-center items-center h-32 hover:bg-blue-300 border-2 border-white hover:border-blue-500">
                 <img src="/images/folder.webp" alt="" class="flex-1 h-16">
-                <%= subfolder.name %>
+                <%= folder.name %>
             </a>
+            <% } %>
             <% }) %>
             <% } %>
         </div>
