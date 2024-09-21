@@ -67,6 +67,17 @@ exports.getUserById = async (id) => {
 
 exports.createNewFolder = async (newFolderName, userId, parentId) => {
     try {
+        const existingFolder = await prisma.folder.findFirst({
+            where: {
+                name: newFolderName,
+                userId: userId,
+                parentId: parentId,
+            },
+        });
+
+        if (existingFolder) {
+            return "Folder name already exists";
+        }
         const folder = await prisma.folder.create({
             data: {
                 name: newFolderName,
@@ -82,6 +93,7 @@ exports.createNewFolder = async (newFolderName, userId, parentId) => {
                 },
             },
         });
+        return folder;
     } catch (error) {
         console.error(error);
         throw error;

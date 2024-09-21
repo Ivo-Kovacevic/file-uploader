@@ -41,12 +41,9 @@ exports.createFolderPost = [
     asyncHandler(async (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).render("drive", {
-                errors: errors.array(),
-                folderName: req.body,
-                currentUrl: req.originalUrl,
-                currentFolder: req.currentFolder,
-            });
+            req.flash("errors", errors.array());
+            req.flash("folderName", req.body);
+            req.flash("currentUrl", req.originalUrl);
         }
 
         const newFolderName = req.body.newFolder;
@@ -54,7 +51,14 @@ exports.createFolderPost = [
         const parentFolderId = req.currentFolder.id;
         const url = req.pathArray.join("/");
 
-        await query.createNewFolder(newFolderName, userId, parentFolderId);
+        const newFolder = await query.createNewFolder(
+            newFolderName,
+            userId,
+            parentFolderId
+        );
+        if (newFolder === "Folder name already exists") {
+            req.flash("error", "Folder name already exists");
+        }
         return res.redirect(`/${url}`);
     }),
 ];

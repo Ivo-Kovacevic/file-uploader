@@ -4,7 +4,7 @@ const driveRouter = Router();
 const driveController = require("../controllers/driveController");
 
 driveRouter.use(async (req, res, next) => {
-    // Redirect user if they isn't logged in
+    // Redirect user if they aren't logged in
     if (!req.user) {
         return driveController.unauthorizedGet(req, res);
     }
@@ -20,21 +20,18 @@ driveRouter.use(async (req, res, next) => {
         rootFolder,
         subfoldersPathArray
     );
-    console.log(pathArray);
-
     if (pathArray[pathArray.length - 1] === "create-folder") {
         pathArray.pop();
     }
     req.pathArray = pathArray;
     req.currentFolder = currentFolder;
-
     next();
 });
 
 driveRouter.get("/logout", driveController.logoutGet);
 
-driveRouter.post("*/create-folder", driveController.createFolderPost);
 driveRouter.post("/upload", driveController.uploadFilePost);
+driveRouter.post("*/create-folder", driveController.createFolderPost);
 driveRouter.get("/*", driveController.driveGet);
 
 module.exports = driveRouter;
