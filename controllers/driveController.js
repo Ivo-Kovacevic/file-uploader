@@ -80,7 +80,6 @@ exports.deleteFolderGet = asyncHandler(async (req, res) => {
 exports.uploadFilePost = [
     upload.single("newFile"),
     asyncHandler(async (req, res) => {
-
         const url = req.pathArray.join("/");
 
         const name = req.file.originalname;
@@ -89,7 +88,7 @@ exports.uploadFilePost = [
         const size = req.file.size;
         const folderId = req.currentFolder.id;
         const newFile = await query.uploadFile(name, hashedName, path, size, folderId);
-        
+
         // console.log(cloudinary);
         // const result = await cloudinary.uploader.upload(`./uploads/${hashedName}`);
 
@@ -99,7 +98,6 @@ exports.uploadFilePost = [
 ];
 
 exports.deleteFileGet = asyncHandler(async (req, res) => {
-
     const fileId = decodeURIComponent(req.params.id);
     const file = await query.deleteFile(fileId);
 
@@ -127,10 +125,9 @@ exports.deleteFileGet = asyncHandler(async (req, res) => {
 });
 
 exports.readFileGet = asyncHandler(async (req, res, next) => {
-
-    const fileId = decodeURIComponent(req.params.id);
+    const fileName = decodeURIComponent(req.params.name);
     if (!req.currentFolder) {
-        const file = await query.readFile(fileId);
+        const [file] = await query.readFile(fileName, req.fileFolderId);
         const path = require("path");
         fs.readFile(path.join(__dirname, "../uploads", file.hashedName), "utf8", (err, data) => {
             if (err) {

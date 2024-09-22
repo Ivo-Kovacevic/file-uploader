@@ -104,6 +104,7 @@ exports.createNewFolder = async (newFolderName, userId, parentId) => {
 exports.getFolderContent = async (rootFolder, subfoldersPathArray) => {
     try {
         // Get current folder with subfolders
+        let lastValidFolderId = rootFolder.id;
         let currentFolder = await prisma.folder.findUnique({
             where: {
                 id: rootFolder.id,
@@ -124,6 +125,7 @@ exports.getFolderContent = async (rootFolder, subfoldersPathArray) => {
             });
             if (subfolder) {
                 const subfolderId = subfolder.id;
+                lastValidFolderId = subfolderId;
                 currentFolder = await prisma.folder.findUnique({
                     where: {
                         id: subfolderId,
@@ -135,11 +137,11 @@ exports.getFolderContent = async (rootFolder, subfoldersPathArray) => {
                     },
                 });
             } else if (folderName) {
-                return (currentFolder = null);
+                return { currentFolder: null, lastValidFolderId };
             }
         }
 
-        return currentFolder;
+        return { currentFolder };
     } catch (error) {
         console.error(error);
         throw error;
@@ -209,11 +211,12 @@ exports.deleteFile = async (fileId) => {
     }
 };
 
-exports.readFile = async (fileId) => {
+exports.readFile = async (fileName, folderId) => {
     try {
-        return await prisma.file.findUnique({
+        return await prisma.file.findMany({
             where: {
-                id: parseInt(fileId),
+                name: fileName,
+                folderId: folderId
             },
         });
     } catch (error) {

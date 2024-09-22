@@ -17,9 +17,10 @@ exports.currentFolderMiddleware = asyncHandler(async (req, res, next) => {
     const [rootFolder] = req.user.folders.filter(
         (folder) => folder.userId === req.user.id && folder.parentId === null
     );
-    const currentFolder = await query.getFolderContent(rootFolder, subfoldersPathArray);
-
+    const folderContents = await query.getFolderContent(rootFolder, subfoldersPathArray);
+    
+    req.fileFolderId = folderContents.lastValidFolderId;
+    req.currentFolder = folderContents.currentFolder;
     req.pathArray = pathArray;
-    req.currentFolder = currentFolder;
     next();
 });
