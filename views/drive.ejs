@@ -31,6 +31,8 @@
             </div>
             <div class="pt-8 h-min grid gap-4 grid-cols-[repeat(auto-fill,minmax(8rem,1fr))]">
                 <% if(locals.currentFolder) { %>
+                    
+                <!-- List folders -->
                 <% currentFolder.subfolders.forEach(subfolder => { %>
                 <div>
                     <a href="<%= currentUrl %>/<%= subfolder.name %>" class="flex flex-col justify-center items-center h-32 hover:bg-blue-300 border-2 border-white hover:border-blue-500">
@@ -42,6 +44,8 @@
                     </div>
                 </div>
                 <% }) %>
+
+                <!-- List files -->
                 <% currentFolder.files.forEach(file => { %>
                 <div>
                     <a href="<%= currentUrl %>/<%= file.name %>" class="flex flex-col justify-center items-center h-32 hover:bg-blue-300 border-2 border-white hover:border-blue-500">
@@ -53,6 +57,7 @@
                     </div>
                 </div>
                 <% }) %>
+
                 <% } %>
             </div>
         </div>

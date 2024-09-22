@@ -44,7 +44,7 @@ model File {
   hashedName  String
   path        String
   size        Int
-  folder      Folder    @relation(fields: [folderId], references: [id])
+  folder      Folder    @relation(fields: [folderId], references: [id], onDelete: Cascade)
   folderId    Int
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt

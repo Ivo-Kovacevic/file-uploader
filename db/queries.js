@@ -138,7 +138,6 @@ exports.getFolderContent = async (rootFolder, subfoldersPathArray) => {
                 return (currentFolder = null);
             }
         }
-        console.log(currentFolder);
 
         return currentFolder;
     } catch (error) {
@@ -152,9 +151,6 @@ exports.deleteFolder = async (folderId) => {
         await prisma.folder.delete({
             where: {
                 id: parseInt(folderId),
-            },
-            include: {
-                subfolders: true,
             },
         });
     } catch (error) {
@@ -198,12 +194,11 @@ exports.uploadFile = async (name, hashedName, path, size, folderId) => {
     }
 };
 
-exports.deleteFile = async (name, hashedName, path, size, folderId) => {
+exports.deleteFile = async (fileId) => {
     try {
-        const existingFile = await prisma.file.delete({
+        return await prisma.file.delete({
             where: {
-                name: name,
-                folderId: folderId,
+                id: parseInt(fileId),
             },
         });
     } catch (error) {

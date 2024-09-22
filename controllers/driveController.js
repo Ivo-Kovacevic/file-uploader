@@ -87,7 +87,7 @@ exports.uploadFilePost = [
     asyncHandler(async (req, res, next) => {
         const pathArray = req.originalUrl.split("/").filter((item) => item !== "");
 
-        // Remove "/create-folder" from url
+        // Remove "/upload-file" from url
         pathArray.pop();
         const url = pathArray.join("/");
 
@@ -117,3 +117,34 @@ exports.uploadFilePost = [
         return res.redirect(`/${url}`);
     }),
 ];
+
+exports.deleteFileGet = asyncHandler(async (req, res) => {
+    const pathArray = req.originalUrl.split("/").filter((item) => item !== "");
+    // Remove "/delete-file" from url
+    pathArray.pop();
+
+    const fileId = decodeURIComponent(req.params.id);
+    const file = await query.deleteFile(fileId);
+
+    // Delete file from system
+    const path = require("path");
+    const filePath = path.join("uploads", file.hashedName);
+    if (fs.existsSync(filePath)) {
+        fs.unlink(filePath, (err) => {
+            if (err) {
+                console.error("Error deleting the file:", err);
+                throw err;
+            }
+            console.log(`File ${file.hashedName} deleted successfully.`);
+        });
+    } else {
+        console.log(`File ${file.hashedName} does not exist.`);
+    }
+
+    // Remove folderId from the url
+    pathArray.pop();
+    const url = pathArray.join("/");
+
+    // Redirect to driveGet
+    return res.redirect(`/${url}`);
+});
