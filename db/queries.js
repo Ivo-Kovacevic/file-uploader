@@ -208,3 +208,18 @@ exports.deleteFile = async (fileId) => {
         await prisma.$disconnect();
     }
 };
+
+exports.readFile = async (fileId) => {
+    try {
+        return await prisma.file.findUnique({
+            where: {
+                id: parseInt(fileId),
+            },
+        });
+    } catch (error) {
+        console.error(error);
+        throw error;
+    } finally {
+        await prisma.$disconnect();
+    }
+};

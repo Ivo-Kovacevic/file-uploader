@@ -1,7 +1,7 @@
 const { check, body } = require("express-validator");
 
 const alphaErr = "must only contain letters and numbers.";
-const folderLengthErr = "must be between 4 and 20 characters.";
+const folderLengthErr = "must be between 1 and 20 characters.";
 
 const validateNewFolder = [
     check("newFolder")

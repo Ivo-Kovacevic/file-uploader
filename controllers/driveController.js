@@ -4,6 +4,9 @@ const { validationResult } = require("express-validator");
 const { validateNewFolder } = require("../validation/folder-validation");
 const upload = require("../config/multerConfig");
 const asyncHandler = require("express-async-handler");
+const { render } = require("ejs");
+const { log } = require("console");
+const cloudinary = require("../config/cloudinaryConfig");
 
 exports.unauthorizedGet = asyncHandler(async (req, res) => {
     return res.render("unauthorized");
@@ -27,7 +30,6 @@ exports.driveGet = asyncHandler(async (req, res) => {
     if (req.currentFolder === null) {
         return res.render("invalid");
     }
-
     return res.render("drive", {
         currentFolder: req.currentFolder,
         pathArray: req.pathArray,
@@ -38,11 +40,8 @@ exports.createFolderPost = [
     validateNewFolder,
     asyncHandler(async (req, res, next) => {
         const errors = validationResult(req);
-        const pathArray = req.originalUrl.split("/").filter((item) => item !== "");
 
-        // Remove "/create-folder" from url
-        pathArray.pop();
-        const url = pathArray.join("/");
+        const url = req.pathArray.join("/");
 
         // Redirect if folder validation fails
         if (!errors.isEmpty()) {
@@ -67,16 +66,12 @@ exports.createFolderPost = [
 ];
 
 exports.deleteFolderGet = asyncHandler(async (req, res) => {
-    const pathArray = req.originalUrl.split("/").filter((item) => item !== "");
-    // Remove "/delete-folder" from url
-    pathArray.pop();
-
     const folderId = decodeURIComponent(req.params.id);
     await query.deleteFolder(folderId);
 
     // Remove folderId from the url
-    pathArray.pop();
-    const url = pathArray.join("/");
+    req.pathArray.pop();
+    const url = req.pathArray.join("/");
 
     // Redirect to driveGet
     return res.redirect(`/${url}`);
@@ -84,44 +79,26 @@ exports.deleteFolderGet = asyncHandler(async (req, res) => {
 
 exports.uploadFilePost = [
     upload.single("newFile"),
-    asyncHandler(async (req, res, next) => {
-        const pathArray = req.originalUrl.split("/").filter((item) => item !== "");
+    asyncHandler(async (req, res) => {
 
-        // Remove "/upload-file" from url
-        pathArray.pop();
-        const url = pathArray.join("/");
+        const url = req.pathArray.join("/");
 
         const name = req.file.originalname;
         const hashedName = req.file.filename;
         const path = req.file.originalname;
         const size = req.file.size;
         const folderId = req.currentFolder.id;
-
         const newFile = await query.uploadFile(name, hashedName, path, size, folderId);
-        if (newFile === "File with that name already exists") {
-            const path = require("path");
-            const filePath = path.join("uploads", hashedName);
-            if (fs.existsSync(filePath)) {
-                fs.unlink(filePath, (err) => {
-                    if (err) {
-                        console.error("Error deleting the file:", err);
-                        throw err;
-                    }
-                    console.log(`File ${hashedName} deleted successfully.`);
-                });
-            } else {
-                console.log(`File ${hashedName} does not exist.`);
-            }
-        }
+        
+        // console.log(cloudinary);
+        // const result = await cloudinary.uploader.upload(`./uploads/${hashedName}`);
+
         // Redirect to driveGet
         return res.redirect(`/${url}`);
     }),
 ];
 
 exports.deleteFileGet = asyncHandler(async (req, res) => {
-    const pathArray = req.originalUrl.split("/").filter((item) => item !== "");
-    // Remove "/delete-file" from url
-    pathArray.pop();
 
     const fileId = decodeURIComponent(req.params.id);
     const file = await query.deleteFile(fileId);
@@ -142,9 +119,30 @@ exports.deleteFileGet = asyncHandler(async (req, res) => {
     }
 
     // Remove folderId from the url
-    pathArray.pop();
-    const url = pathArray.join("/");
+    req.pathArray.pop();
+    const url = req.pathArray.join("/");
 
     // Redirect to driveGet
     return res.redirect(`/${url}`);
+});
+
+exports.readFileGet = asyncHandler(async (req, res, next) => {
+
+    const fileId = decodeURIComponent(req.params.id);
+    if (!req.currentFolder) {
+        const file = await query.readFile(fileId);
+        const path = require("path");
+        fs.readFile(path.join(__dirname, "../uploads", file.hashedName), "utf8", (err, data) => {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            return res.render("drive", {
+                pathArray: req.pathArray,
+                fileContent: data,
+            });
+        });
+        return;
+    }
+    next();
 });

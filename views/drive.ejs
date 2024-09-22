@@ -29,9 +29,13 @@
                 <% }) %>
                 <% } %>
             </div>
+            <% if (locals.fileContent) { %>
+            <h2>File conent:</h2>
+            <p> <%= fileContent %></p>
+            <% } else { %>
             <div class="pt-8 h-min grid gap-4 grid-cols-[repeat(auto-fill,minmax(8rem,1fr))]">
                 <% if(locals.currentFolder) { %>
-                    
+
                 <!-- List folders -->
                 <% currentFolder.subfolders.forEach(subfolder => { %>
                 <div>
@@ -48,7 +52,7 @@
                 <!-- List files -->
                 <% currentFolder.files.forEach(file => { %>
                 <div>
-                    <a href="<%= currentUrl %>/<%= file.name %>" class="flex flex-col justify-center items-center h-32 hover:bg-blue-300 border-2 border-white hover:border-blue-500">
+                    <a href="<%= currentUrl %>/<%= file.id %>" class="flex flex-col justify-center items-center h-32 hover:bg-blue-300 border-2 border-white hover:border-blue-500">
                         <img src="/images/file.webp" alt="" class="flex-1 h-16">
                         <%= file.name %>
                     </a>
@@ -60,6 +64,7 @@
 
                 <% } %>
             </div>
+            <% } %>
         </div>
     </div>
 </body>
