@@ -1,9 +1,9 @@
+const fs = require("fs");
 const query = require("../db/queries");
 const { validationResult } = require("express-validator");
 const { validateNewFolder } = require("../validation/folder-validation");
 const upload = require("../config/multerConfig");
 const asyncHandler = require("express-async-handler");
-const { currentFolderData } = require("../middlewares/currentFolderMiddleware");
 
 exports.unauthorizedGet = asyncHandler(async (req, res) => {
     return res.render("unauthorized");
@@ -38,9 +38,7 @@ exports.createFolderPost = [
     validateNewFolder,
     asyncHandler(async (req, res, next) => {
         const errors = validationResult(req);
-        const pathArray = req.originalUrl
-            .split("/")
-            .filter((item) => item !== "");
+        const pathArray = req.originalUrl.split("/").filter((item) => item !== "");
 
         // Remove "/create-folder" from url
         pathArray.pop();
@@ -59,11 +57,7 @@ exports.createFolderPost = [
         const newFolderName = req.body.newFolder;
         const userId = req.user.id;
         const parentFolderId = req.currentFolder.id;
-        const newFolder = await query.createNewFolder(
-            newFolderName,
-            userId,
-            parentFolderId
-        );
+        const newFolder = await query.createNewFolder(newFolderName, userId, parentFolderId);
         if (newFolder === "Folder name already exists") {
             req.flash("error", "Folder name already exists");
         }
@@ -92,6 +86,28 @@ exports.deleteFolderGet = asyncHandler(async (req, res) => {
 exports.uploadFilePost = [
     upload.single("newFile"),
     asyncHandler(async (req, res, next) => {
+        const name = req.file.originalname;
+        const hashedName = req.file.filename;
+        const path = req.file.originalname;
+        const size = req.file.size;
+        const folderId = req.currentFolder.id;
+
+        const newFile = await query.uploadFile(name, hashedName, path, size, folderId);
+        if (newFile === "File with that name already exists") {
+            const path = require("path");
+            const filePath = path.join("uploads", hashedName);
+            if (fs.existsSync(filePath)) {
+                fs.unlink(filePath, (err) => {
+                    if (err) {
+                        console.error("Error deleting the file:", err);
+                        throw err;
+                    }
+                    console.log(`File ${hashedName} deleted successfully.`);
+                });
+            } else {
+                console.log(`File ${hashedName} does not exist.`);
+            }
+        }
         return res.redirect("/drive");
     }),
 ];

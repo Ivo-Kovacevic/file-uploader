@@ -41,6 +41,7 @@ model Folder {
 model File {
   id          Int       @id @default(autoincrement())
   name        String
+  hashedName  String
   path        String
   size        Int
   folder      Folder    @relation(fields: [folderId], references: [id])

@@ -1,5 +1,6 @@
 const { PrismaClient } = require("@prisma/client");
 const asyncHandler = require("express-async-handler");
+const { connect } = require("../routes/driveRouter");
 
 const prisma = new PrismaClient();
 
@@ -109,6 +110,7 @@ exports.getFolderContent = async (rootFolder, subfoldersPathArray) => {
             },
             include: {
                 subfolders: true,
+                files: true,
             },
         });
         // Shift array so first element is subfolder name and not root folder name
@@ -129,12 +131,15 @@ exports.getFolderContent = async (rootFolder, subfoldersPathArray) => {
                     },
                     include: {
                         subfolders: true,
+                        files: true,
                     },
                 });
             } else if (folderName) {
                 return (currentFolder = null);
             }
         }
+        console.log(currentFolder);
+
         return currentFolder;
     } catch (error) {
         console.error(error);
@@ -150,6 +155,55 @@ exports.deleteFolder = async (folderId) => {
             },
             include: {
                 subfolders: true,
+            },
+        });
+    } catch (error) {
+        console.error(error);
+        throw error;
+    } finally {
+        await prisma.$disconnect();
+    }
+};
+
+exports.uploadFile = async (name, hashedName, path, size, folderId) => {
+    try {
+        const existingFile = await prisma.file.findFirst({
+            where: {
+                name: name,
+                folderId: folderId,
+            },
+        });
+
+        if (existingFile) {
+            return "File with that name already exists";
+        }
+        await prisma.file.create({
+            data: {
+                name: name,
+                hashedName: hashedName,
+                path: path,
+                size: size,
+                folder: {
+                    connect: {
+                        id: folderId,
+                    },
+                },
+            },
+        });
+    } catch (error) {
+        console.error(error);
+        throw error;
+    } finally {
+        await prisma.$disconnect();
+    }
+};
+
+exports.deleteFile = async (name, hashedName, path, size, folderId) => {
+    try {
+        const existingFile = await prisma.file.delete({
+            where: {
+                name: name,
+                folderId: folderId,
             },
         });
     } catch (error) {

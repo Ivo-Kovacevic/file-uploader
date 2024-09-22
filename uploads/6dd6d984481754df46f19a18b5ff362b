@@ -1,0 +1,3 @@
+xinput set-button-map 14 1 0 3
+
+redshift -P -O 4000

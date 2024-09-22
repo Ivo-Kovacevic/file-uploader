@@ -42,6 +42,17 @@
                     </div>
                 </div>
                 <% }) %>
+                <% currentFolder.files.forEach(file => { %>
+                <div>
+                    <a href="<%= currentUrl %>/<%= file.name %>" class="flex flex-col justify-center items-center h-32 hover:bg-blue-300 border-2 border-white hover:border-blue-500">
+                        <img src="/images/file.webp" alt="" class="flex-1 h-16">
+                        <%= file.name %>
+                    </a>
+                    <div class="flex justify-center">
+                        <a href="<%= currentUrl %>/<%= file.id %>/delete-file" class="w-m text-sm text-center hover:text-red-700">Delete</a>
+                    </div>
+                </div>
+                <% }) %>
                 <% } %>
             </div>
         </div>
