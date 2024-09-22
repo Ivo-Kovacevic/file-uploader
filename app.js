@@ -36,13 +36,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(flash());
 app.use((req, res, next) => {
     res.locals.currentUser = req.user;
-    currentUrl = req.originalUrl;
+    res.locals.currentUrl = req.originalUrl;
     res.locals.flashMessages = req.flash();
     next();
 });
 
 app.use("/drive", driveRouter);
-
 app.use("/", indexRouter);
 
 app.listen(PORT, () => console.log(`App is live at port ${PORT}`));

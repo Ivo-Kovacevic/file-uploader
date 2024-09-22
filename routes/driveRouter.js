@@ -1,37 +1,19 @@
-const query = require("../db/queries");
 const { Router } = require("express");
 const driveRouter = Router();
 const driveController = require("../controllers/driveController");
+const { authorizeUser } = require("../middlewares/authMiddleware");
+const { currentFolderMiddleware } = require("../middlewares/currentFolderMiddleware");
+const { createFolderMiddleware } = require("../middlewares/createFolderMiddleware");
 
-driveRouter.use(async (req, res, next) => {
-    // Redirect user if they aren't logged in
-    if (!req.user) {
-        return driveController.unauthorizedGet(req, res);
-    }
+driveRouter.use(authorizeUser);
 
-    // Add current folder contents and url path array to the request
-    const pathArray = req.originalUrl.split("/").filter((item) => item !== "");
-    if (pathArray[pathArray.length - 1] === "create-folder") {
-        pathArray.pop();
-    }
-    const subfoldersPathArray = [...pathArray];
+driveRouter.get("*/:id/delete-folder", driveController.deleteFolderGet);
+driveRouter.post("*/create-folder", createFolderMiddleware, driveController.createFolderPost);
 
-    const [rootFolder] = req.user.folders.filter(
-        (folder) => folder.userId === req.user.id && folder.parentId === null
-    );
-    const currentFolder = await query.getFolderContent(
-        rootFolder,
-        subfoldersPathArray
-    );
-    req.pathArray = pathArray;
-    req.currentFolder = currentFolder;
-    next();
-});
+driveRouter.post("/upload", driveController.uploadFilePost);
 
 driveRouter.get("/logout", driveController.logoutGet);
 
-driveRouter.post("/upload", driveController.uploadFilePost);
-driveRouter.post("*/create-folder", driveController.createFolderPost);
-driveRouter.get("/*", driveController.driveGet);
+driveRouter.get("/*", currentFolderMiddleware, driveController.driveGet);
 
 module.exports = driveRouter;

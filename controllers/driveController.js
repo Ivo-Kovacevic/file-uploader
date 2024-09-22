@@ -3,6 +3,7 @@ const { validationResult } = require("express-validator");
 const { validateNewFolder } = require("../validation/folder-validation");
 const upload = require("../config/multerConfig");
 const asyncHandler = require("express-async-handler");
+const { currentFolderData } = require("../middlewares/currentFolderMiddleware");
 
 exports.unauthorizedGet = asyncHandler(async (req, res) => {
     return res.render("unauthorized");
@@ -37,7 +38,14 @@ exports.createFolderPost = [
     validateNewFolder,
     asyncHandler(async (req, res, next) => {
         const errors = validationResult(req);
-        const url = req.pathArray.join("/");
+        const pathArray = req.originalUrl
+            .split("/")
+            .filter((item) => item !== "");
+
+        // Remove "/create-folder" from url
+        pathArray.pop();
+
+        const url = pathArray.join("/");
 
         // Redirect if folder validation fails
         if (!errors.isEmpty()) {
@@ -59,9 +67,27 @@ exports.createFolderPost = [
         if (newFolder === "Folder name already exists") {
             req.flash("error", "Folder name already exists");
         }
+
+        // Redirect to driveGet
         return res.redirect(`/${url}`);
     }),
 ];
+
+exports.deleteFolderGet = asyncHandler(async (req, res) => {
+    const pathArray = req.originalUrl.split("/").filter((item) => item !== "");
+    // Remove "/delete-folder" from url
+    pathArray.pop();
+
+    const folderId = decodeURIComponent(req.params.id);
+    await query.deleteFolder(folderId);
+
+    // Remove folderId from the url
+    pathArray.pop();
+    const url = pathArray.join("/");
+
+    // Redirect to driveGet
+    return res.redirect(`/${url}`);
+});
 
 exports.uploadFilePost = [
     upload.single("newFile"),

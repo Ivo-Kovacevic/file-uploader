@@ -141,3 +141,21 @@ exports.getFolderContent = async (rootFolder, subfoldersPathArray) => {
         throw error;
     }
 };
+
+exports.deleteFolder = async (folderId) => {
+    try {
+        await prisma.folder.delete({
+            where: {
+                id: parseInt(folderId),
+            },
+            include: {
+                subfolders: true,
+            },
+        });
+    } catch (error) {
+        console.error(error);
+        throw error;
+    } finally {
+        await prisma.$disconnect();
+    }
+};
