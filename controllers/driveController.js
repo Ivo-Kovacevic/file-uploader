@@ -42,7 +42,6 @@ exports.createFolderPost = [
 
         // Remove "/create-folder" from url
         pathArray.pop();
-
         const url = pathArray.join("/");
 
         // Redirect if folder validation fails
@@ -86,6 +85,12 @@ exports.deleteFolderGet = asyncHandler(async (req, res) => {
 exports.uploadFilePost = [
     upload.single("newFile"),
     asyncHandler(async (req, res, next) => {
+        const pathArray = req.originalUrl.split("/").filter((item) => item !== "");
+
+        // Remove "/create-folder" from url
+        pathArray.pop();
+        const url = pathArray.join("/");
+
         const name = req.file.originalname;
         const hashedName = req.file.filename;
         const path = req.file.originalname;
@@ -108,6 +113,7 @@ exports.uploadFilePost = [
                 console.log(`File ${hashedName} does not exist.`);
             }
         }
-        return res.redirect("/drive");
+        // Redirect to driveGet
+        return res.redirect(`/${url}`);
     }),
 ];
