@@ -12,16 +12,17 @@
         </li>
         <li>
             <% if (!locals.fileContent) { %>
-            <form id="createFolderForm" action="<%= currentUrl %>/create-folder" method="post" class="mb-8 p-1 flex flex-col rounded-xl text-black bg-white text-center">
-                <label for="newFolder">Create new folder</label>
-                <input type="text" name="newFolder" id="newFolder" placeholder="Folder name" class="p-2 rounded-xl border-2 border-gray-400" value="<%= locals.folderName && folderName.newFolder ? folderName.newFolder : '' %>" required>
+            <form action="" method="post" class="mb-8 p-1 flex flex-col rounded-xl text-black bg-white text-center">
+                <label for="folder_name">Create new folder</label>
+                <input type="text" name="folder_name" id="folder_name" placeholder="Folder name" class="p-2 rounded-xl border-2 border-gray-400" value="<%= locals.folderName && folderName.newFolder ? folderName.newFolder : '' %>" required>
                 <input type="hidden" name="currentFolder" value="<%= locals.currentFolder ? currentFolder : '' %>">
                 <%- include("partials/folderErrors.ejs") %>
                 <button type="submit" class="mt-4 px-8 py-2 w-full border-2 text-white bg-blue-500 border-blue-500 rounded-xl font-bold hover:bg-blue-700 hover:border-blue-700">Create folder</button>
             </form>
-            <form action="<%= currentUrl %>/upload-file" method="post" enctype="multipart/form-data" class="p-1 flex flex-col rounded-xl text-black bg-white text-center">
-                <label for="newFile" class="cursor-pointer px-8 py-4 rounded-lg border-dashed border-4 border-blue-500 hover:border-blue-700">Select file</label>
-                <input type="file" name="newFile" id="newFile" class="hidden" />
+            <form action="" method="post" enctype="multipart/form-data" class="p-1 flex flex-col rounded-xl text-black bg-white text-center">
+                <input type="hidden" name="new_file" value="true">
+                <label for="upload_file" class="cursor-pointer px-8 py-4 rounded-lg border-dashed border-4 border-blue-500 hover:border-blue-700">Select file</label>
+                <input type="file" name="upload_file" id="upload_file" class="hidden" />
                 <button type="submit" class="mt-4 px-8 py-2 w-full border-2 text-white bg-blue-500 border-blue-500 rounded-xl font-bold hover:bg-blue-700 hover:border-blue-700">Upload file</button>
             </form>
             <% } %>

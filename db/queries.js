@@ -68,6 +68,8 @@ exports.getUserById = async (id) => {
 
 exports.createNewFolder = async (newFolderName, userId, parentId) => {
     try {
+        console.log("WTF");
+
         const existingFolder = await prisma.folder.findFirst({
             where: {
                 name: newFolderName,
@@ -216,7 +218,7 @@ exports.readFile = async (fileName, folderId) => {
         return await prisma.file.findMany({
             where: {
                 name: fileName,
-                folderId: folderId
+                folderId: folderId,
             },
         });
     } catch (error) {

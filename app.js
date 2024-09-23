@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const expressSession = require("express-session");
+const methodOverride = require("method-override");
 const { PrismaSessionStore } = require("@quixo3/prisma-session-store");
 const { PrismaClient } = require("@prisma/client");
 const passport = require("./config/passportConfig");
@@ -15,6 +16,20 @@ const PORT = process.env.PORT || 3000;
 app.set("view engine", "ejs");
 
 app.use(express.static(path.join(__dirname, "public")));
+app.use(express.urlencoded({ extended: false }));
+app.use((req, res, next) => {
+    console.log("WTF");
+    next();
+});
+app.use(
+    methodOverride((req, res) => {
+        if (req.body && typeof req.body === "object" && "_method" in req.body) {
+            const method = req.body._method;
+            delete req.body._method;
+            return method;
+        }
+    })
+);
 
 app.use(
     expressSession({
@@ -32,7 +47,10 @@ app.use(
     })
 );
 app.use(passport.session());
-app.use(express.urlencoded({ extended: false }));
+
+app.put("/*", (req, res) => {
+    console.log("THIS IS PUT");
+});
 app.use(flash());
 app.use((req, res, next) => {
     res.locals.currentUser = req.user;

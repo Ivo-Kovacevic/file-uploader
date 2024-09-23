@@ -47,9 +47,11 @@
                         <img src="/images/folder.webp" alt="" class="flex-1 h-16">
                         <%= subfolder.name %>
                     </a>
-                    <div class="flex justify-center">
-                        <a href="<%= currentUrl %>/<%= subfolder.id %>/delete-folder" class="w-m text-sm text-center hover:text-red-700">Delete</a>
-                    </div>
+                    <form action="" method="post" class="flex justify-center">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="folder_id" value="<%= subfolder.id %>">
+                        <button class="w-m text-sm text-center hover:text-red-700">Delete</button>
+                    </form>
                 </div>
                 <% }) %>
 
@@ -60,9 +62,11 @@
                         <img src="/images/file.webp" alt="" class="flex-1 h-16">
                         <%= file.name %>
                     </a>
-                    <div class="flex justify-center">
-                        <a href="<%= currentUrl %>/<%= file.id %>/delete-file" class="w-m text-sm text-center hover:text-red-700">Delete</a>
-                    </div>
+                    <form action="" method="post" class="flex justify-center">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="file_id" value="<%= file.id %>">
+                        <button class="w-m text-sm text-center hover:text-red-700">Delete</button>
+                    </form>
                 </div>
                 <% }) %>
 

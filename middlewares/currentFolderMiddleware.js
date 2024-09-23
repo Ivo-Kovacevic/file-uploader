@@ -4,14 +4,6 @@ const asyncHandler = require("express-async-handler");
 exports.currentFolderMiddleware = asyncHandler(async (req, res, next) => {
     // Add current folder contents and url path array to the request
     const pathArray = req.originalUrl.split("/").filter((item) => item !== "");
-    if (
-        pathArray[pathArray.length - 1] === "create-folder" ||
-        pathArray[pathArray.length - 1] === "delete-folder" ||
-        pathArray[pathArray.length - 1] === "upload-file" ||
-        pathArray[pathArray.length - 1] === "delete-file"
-    ) {
-        pathArray.pop();
-    }
 
     const subfoldersPathArray = [...pathArray];
     const [rootFolder] = req.user.folders.filter(
