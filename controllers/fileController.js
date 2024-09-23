@@ -42,8 +42,8 @@ exports.deleteFileDelete = asyncHandler(async (req, res) => {
 
 exports.readFileGet = asyncHandler(async (req, res, next) => {
     const fileName = decodeURIComponent(req.params.name);
-    if (!req.currentFolder) {
-        const [file] = await query.readFile(fileName, req.fileFolderId);
+    const [file] = await query.readFile(fileName, req.fileFolderId);
+    if (file) {
         const path = require("path");
         fs.readFile(path.join(__dirname, "../uploads", file.hashedName), "utf8", (err, data) => {
             if (err) {
