@@ -1,17 +1,8 @@
-const fs = require("fs");
-const query = require("../db/queries");
-const { validationResult } = require("express-validator");
-const { validateNewFolder } = require("../validation/folder-validation");
-const upload = require("../config/multerConfig");
 const asyncHandler = require("express-async-handler");
 // const cloudinary = require("../config/cloudinaryConfig");
 
 exports.unauthorizedGet = asyncHandler(async (req, res) => {
     return res.render("unauthorized");
-});
-
-exports.invalidGet = asyncHandler(async (req, res) => {
-    return res.render("invalid");
 });
 
 exports.logoutGet = asyncHandler(async (req, res, next) => {
@@ -24,7 +15,7 @@ exports.logoutGet = asyncHandler(async (req, res, next) => {
 });
 
 exports.driveGet = asyncHandler(async (req, res) => {
-    // Render invalid page folder doesnt exist
+    // Render invalid page folder if doesn't exist
     if (req.currentFolder === null) {
         return res.render("invalid");
     }

@@ -44,48 +44,9 @@
             <div class="pt-8 h-min grid gap-4 grid-cols-[repeat(auto-fill,minmax(8rem,1fr))]">
                 <% if(locals.currentFolder) { %>
 
-                <!-- List folders -->
-                <% currentFolder.subfolders.forEach(subfolder => { %>
-                <div>
-                    <a href="<%= currentUrl %>/<%= subfolder.name %>" class="flex flex-col justify-center items-center h-32 hover:bg-blue-300 border-2 border-white hover:border-blue-500">
-                        <img src="/images/folder.webp" alt="" class="flex-1 max-h-24">
-                        <p class="folder-name"><%= subfolder.name %></p>
-                    </a>
-                    <div class="folder-name-form hidden">
-                        <form action="<%= currentUrl %>/_folder" method="post" class="flex">
-                            <input type="hidden" name="_method" value="PUT">
-                            <input type="text" name="folder_name" value="<%= subfolder.name %>" class="w-full border-2 border-gray-400">
-                            <input type="hidden" name="folder_id" value="<%= subfolder.id %>">
-                            <button class="w-8 h-8 text-white bg-blue-500">></button>
-                        </form>
-                    </div>
-                    <div class="flex justify-evenly">
-                        <form action="<%= currentUrl %>/_folder" method="post" class="flex justify-center">
-                            <input type="hidden" name="_method" value="DELETE">
-                            <input type="hidden" name="folder_id" value="<%= subfolder.id %>">
-                            <button class="w-m text-sm text-center hover:text-red-700">Delete</button>
-                        </form>
-                        <p class="rename w-m text-sm text-center cursor-pointer hover:text-blue-700">Rename</p>
-                    </div>
-                </div>
-
-                <% }) %>
-
-                <!-- List files -->
-                <% currentFolder.files.forEach(file => { %>
-                <div>
-                    <a href="<%= currentUrl %>/<%= file.name %>" class="flex flex-col justify-center items-center h-32 hover:bg-blue-300 border-2 border-white hover:border-blue-500">
-                        <img src="/images/file.webp" alt="" class="flex-1 h-16">
-                        <%= file.name %>
-                    </a>
-                    <form action="<%= currentUrl %>/_file" method="post" class="flex justify-center">
-                        <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="file_id" value="<%= file.id %>">
-                        <button class="w-m text-sm text-center hover:text-red-700">Delete</button>
-                    </form>
-                </div>
-                <% }) %>
-
+                <%- include("folderList") %>
+                <%- include("fileList") %>
+                
                 <% } %>
             </div>
             <% } %>
