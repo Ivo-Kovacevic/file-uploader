@@ -34,6 +34,32 @@ exports.uploadFile = async (name, hashedName, path, size, folderId) => {
     }
 };
 
+exports.renameFile = async (fileName, fileId, folderId) => {
+    try {
+        const existingFile = await prisma.file.findFirst({
+            where: {
+                name: fileName,
+                folderId: folderId,
+            },
+        });
+        if (existingFile) {
+            return "File name already exists";
+        }
+        const file = await prisma.file.update({
+            where: {
+                id: parseInt(fileId),
+            },
+            data: {
+                name: fileName,
+            },
+        });
+        return file;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
+
 exports.deleteFile = async (fileId) => {
     try {
         return await prisma.file.delete({

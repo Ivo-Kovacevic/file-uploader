@@ -2,8 +2,8 @@ document.querySelectorAll(".rename").forEach((renameBtn) => {
     renameBtn.addEventListener("click", () => {
         const parentContainer = renameBtn.closest("div").parentElement;
 
-        const folderName = parentContainer.querySelector(".folder-name");
-        const folderForm = parentContainer.querySelector(".folder-name-form");
+        const folderName = parentContainer.querySelector(".folder-file-name");
+        const folderForm = parentContainer.querySelector(".folder-file-name-form");
 
         folderName.classList.toggle("hidden");
         folderForm.classList.toggle("hidden");

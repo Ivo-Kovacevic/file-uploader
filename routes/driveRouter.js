@@ -15,7 +15,7 @@ driveRouter.post("*_folder", folderController.createFolderPost);
 driveRouter.post("*_file", fileController.uploadFilePost);
 
 driveRouter.put("*_folder", folderController.renameFolderPut);
-// driveRouter.put("*_file", fileController.renameFilePut);
+driveRouter.put("*_file", fileController.renameFilePut);
 
 driveRouter.delete("*_folder", folderController.deleteFolderDelete);
 driveRouter.delete("*_file", fileController.deleteFileDelete);

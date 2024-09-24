@@ -2,9 +2,9 @@
 <div>
     <a href="<%= currentUrl %>/<%= subfolder.name %>" class="flex flex-col justify-center items-center h-32 hover:bg-blue-300 border-2 border-white hover:border-blue-500">
         <img src="/images/folder.webp" alt="" class="flex-1 max-h-24">
-        <p class="folder-name"><%= subfolder.name %></p>
+        <p class="folder-file-name"><%= subfolder.name %></p>
     </a>
-    <div class="folder-name-form hidden">
+    <div class="folder-file-name-form hidden">
         <form action="<%= currentUrl %>/_folder" method="post" class="flex">
             <input type="hidden" name="_method" value="PUT">
             <input type="text" name="folder_name" value="<%= subfolder.name %>" class="w-full border-2 border-gray-400">

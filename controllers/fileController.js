@@ -23,6 +23,19 @@ exports.uploadFilePost = [
     }),
 ];
 
+exports.renameFilePut = asyncHandler(async (req, res) => {
+    const fileName = req.body.file_name;
+    const fileId = req.body.file_id;
+    const parentFolderId = req.currentFolder.id;
+    const file = await query.renameFile(fileName, fileId, parentFolderId);
+    if (file === "File name already exists") {
+        req.flash("fileExists", "File name already exists");
+    }
+
+    // Redirect to driveGet
+    return res.redirect(req.currentUrl);
+});
+
 exports.deleteFileDelete = asyncHandler(async (req, res) => {
     const file = await query.deleteFile(req.body.file_id);
 
