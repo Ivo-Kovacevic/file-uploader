@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/stylesheets/output.css" />
     <link rel="shortcut icon" href="/images/logo/logo.ico" type="image/x-icon" />
     <script src="/js/display-file-name-in-label.js" defer></script>
+    <script src="/js/rename.js" defer></script>
     <title>OnlyFiles</title>
 </head>
 
@@ -47,15 +48,27 @@
                 <% currentFolder.subfolders.forEach(subfolder => { %>
                 <div>
                     <a href="<%= currentUrl %>/<%= subfolder.name %>" class="flex flex-col justify-center items-center h-32 hover:bg-blue-300 border-2 border-white hover:border-blue-500">
-                        <img src="/images/folder.webp" alt="" class="flex-1 h-16">
-                        <%= subfolder.name %>
+                        <img src="/images/folder.webp" alt="" class="flex-1 max-h-24">
+                        <p class="folder-name"><%= subfolder.name %></p>
                     </a>
-                    <form action="<%= currentUrl %>/_folder" method="post" class="flex justify-center">
-                        <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="folder_id" value="<%= subfolder.id %>">
-                        <button class="w-m text-sm text-center hover:text-red-700">Delete</button>
-                    </form>
+                    <div class="folder-name-form hidden">
+                        <form action="" method="post" class="flex">
+                            <input type="hidden" name="_method" value="PUT">
+                            <input type="text" value="<%= subfolder.name %>" class="w-full border-2 border-gray-400">
+                            <input type="hidden" name="folder_id" value="<%= subfolder.id %>">
+                            <button class="w-8 h-8 text-white bg-blue-500">></button>
+                        </form>
+                    </div>
+                    <div class="flex justify-evenly">
+                        <form action="<%= currentUrl %>/_folder" method="post" class="flex justify-center">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="hidden" name="folder_id" value="<%= subfolder.id %>">
+                            <button class="w-m text-sm text-center hover:text-red-700">Delete</button>
+                        </form>
+                        <p class="rename w-m text-sm text-center cursor-pointer hover:text-blue-700">Rename</p>
+                    </div>
                 </div>
+
                 <% }) %>
 
                 <!-- List files -->

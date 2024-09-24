@@ -6,7 +6,7 @@ const { PrismaSessionStore } = require("@quixo3/prisma-session-store");
 const { PrismaClient } = require("@prisma/client");
 const passport = require("./config/passportConfig");
 const path = require("path");
-const flash = require("express-flash");
+const flash = require("connect-flash");
 const indexRouter = require("./routes/indexRouter");
 const driveRouter = require("./routes/driveRouter");
 
