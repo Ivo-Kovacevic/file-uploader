@@ -4,8 +4,6 @@ const { validationResult } = require("express-validator");
 const { validateNewFolder } = require("../validation/folder-validation");
 const upload = require("../config/multerConfig");
 const asyncHandler = require("express-async-handler");
-const { render } = require("ejs");
-const { log } = require("console");
 // const cloudinary = require("../config/cloudinaryConfig");
 
 exports.unauthorizedGet = asyncHandler(async (req, res) => {
