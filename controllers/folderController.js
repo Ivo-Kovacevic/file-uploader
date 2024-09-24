@@ -12,8 +12,8 @@ exports.createFolderPost = asyncHandler(async (req, res, next) => {
     if (!errors.isEmpty()) {
         req.flash("errors", errors.array());
         req.flash("folderName", req.body);
-        req.flash("currentUrl", req.originalUrl);
-        return res.redirect(req.originalUrl);
+        req.flash("currentUrl", req.currentUrl);
+        return res.redirect(req.currentUrl);
     }
 
     // Create new folder if validation passes
@@ -23,16 +23,16 @@ exports.createFolderPost = asyncHandler(async (req, res, next) => {
     const newFolder = await query.createNewFolder(newFolderName, userId, parentFolderId);
     if (newFolder === "Folder name already exists") {
         req.flash("error", "Folder name already exists");
-        return res.redirect(req.originalUrl);
+        return res.redirect(req.currentUrl);
     }
 
     // Redirect to driveGet
-    return res.redirect(req.originalUrl);
+    return res.redirect(req.currentUrl);
 });
 
 exports.deleteFolderDelete = asyncHandler(async (req, res) => {
     await query.deleteFolder(req.body.folder_id);
 
     // Redirect to driveGet
-    return res.redirect(req.originalUrl);
+    return res.redirect(req.currentUrl);
 });

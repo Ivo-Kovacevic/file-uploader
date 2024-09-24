@@ -15,7 +15,7 @@ exports.uploadFilePost = asyncHandler(async (req, res) => {
     // const result = await cloudinary.uploader.upload(`./uploads/${hashedName}`);
 
     // Redirect to driveGet
-    return res.redirect(req.originalUrl);
+    return res.redirect(req.currentUrl);
 });
 
 exports.deleteFileDelete = asyncHandler(async (req, res) => {
@@ -37,7 +37,7 @@ exports.deleteFileDelete = asyncHandler(async (req, res) => {
     }
 
     // Redirect to driveGet
-    return res.redirect(req.originalUrl);
+    return res.redirect(req.currentUrl);
 });
 
 exports.readFileGet = asyncHandler(async (req, res, next) => {

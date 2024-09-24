@@ -13,23 +13,11 @@ driveRouter.use(currentFolderMiddleware);
 
 driveRouter.get("/logout", driveController.logoutGet);
 
-driveRouter.delete("*", (req, res, next) => {
-    if (req.body.folder_id) {
-        return folderController.deleteFolderDelete(req, res, next);
-    } else if (req.body.file_id) {
-        return fileController.deleteFileDelete(req, res, next);
-    }
-    next();
-});
+driveRouter.post("*_folder", folderController.createFolderPost);
+driveRouter.post("*_file", fileController.uploadFilePost);
 
-driveRouter.post("*", (req, res, next) => {
-    upload.single("upload_file")(req, res, () => {
-        if (req.body.folder_name) {
-            return folderController.createFolderPost(req, res, next);
-        }
-        return fileController.uploadFilePost(req, res);
-    });
-});
+driveRouter.delete("*_folder", folderController.deleteFolderDelete);
+driveRouter.delete("*_file", fileController.deleteFileDelete);
 
 driveRouter.get("*/:name", fileController.readFileGet);
 
