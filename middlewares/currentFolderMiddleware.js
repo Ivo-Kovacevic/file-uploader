@@ -1,4 +1,4 @@
-const query = require("../db/queries");
+const query = require("../db/folderQueries");
 const asyncHandler = require("express-async-handler");
 
 exports.currentFolderMiddleware = asyncHandler(async (req, res, next) => {

@@ -1,5 +1,5 @@
 const fs = require("fs");
-const query = require("../db/queries");
+const query = require("../db/fileQueries");
 const upload = require("../config/multerConfig");
 const asyncHandler = require("express-async-handler");
 
