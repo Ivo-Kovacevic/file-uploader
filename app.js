@@ -6,7 +6,7 @@ const { PrismaSessionStore } = require("@quixo3/prisma-session-store");
 const { PrismaClient } = require("@prisma/client");
 const passport = require("./config/passportConfig");
 const path = require("path");
-const flash = require("connect-flash");
+const flash = require("express-flash");
 const indexRouter = require("./routes/indexRouter");
 const driveRouter = require("./routes/driveRouter");
 
@@ -17,10 +17,6 @@ app.set("view engine", "ejs");
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: false }));
-app.use((req, res, next) => {
-    console.log("WTF");
-    next();
-});
 app.use(
     methodOverride((req, res) => {
         if (req.body && typeof req.body === "object" && "_method" in req.body) {
@@ -47,15 +43,10 @@ app.use(
     })
 );
 app.use(passport.session());
-
-app.put("/*", (req, res) => {
-    console.log("THIS IS PUT");
-});
 app.use(flash());
 app.use((req, res, next) => {
     res.locals.currentUser = req.user;
     res.locals.currentUrl = req.originalUrl;
-    res.locals.flashMessages = req.flash();
     next();
 });
 

@@ -10,7 +10,7 @@
 </head>
 
 <body>
-    <% if (flashMessages.error) { %>
+    <% if (locals.folderExists && folderExists.length > 0) { %>
     <div class="flex justify-between items-center absolute left-0 right-0 m-16 p-4 text-white bg-red-700 shadow-2xl shadow-black rounded-2xl">
         <strong>Folder with that name already exists</strong>
         <span class="text-4xl hover:cursor-pointer" onclick="this.parentElement.style.display='none';">&times;</span>
@@ -35,7 +35,7 @@
             <h2 class="mt-8 text-2xl">File content:</h2>
             <p> <%= fileContent %></p>
 
-            <!-- Display folders -->
+            <!-- Display folders and files -->
             <% } else { %>
             <div class="pt-8 h-min grid gap-4 grid-cols-[repeat(auto-fill,minmax(8rem,1fr))]">
                 <% if(locals.currentFolder) { %>

@@ -1,4 +1,4 @@
-<% if (flashMessages.errors) { %>
+<% if (locals.flashMessages) { %>
     <% flashMessages.errors.forEach(error => { %>
         <p class="text-red-700"><%= error.msg %></p>
     <% }) %>

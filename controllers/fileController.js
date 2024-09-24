@@ -3,20 +3,25 @@ const query = require("../db/queries");
 const upload = require("../config/multerConfig");
 const asyncHandler = require("express-async-handler");
 
-exports.uploadFilePost = asyncHandler(async (req, res) => {
-    const name = req.file.originalname;
-    const hashedName = req.file.filename;
-    const path = req.file.originalname;
-    const size = req.file.size;
-    const folderId = req.currentFolder.id;
-    const newFile = await query.uploadFile(name, hashedName, path, size, folderId);
+exports.uploadFilePost = [
+    upload.single("upload_file"),
+    asyncHandler(async (req, res) => {
+        const url = req.pathArray.join("/");
 
-    // console.log(cloudinary);
-    // const result = await cloudinary.uploader.upload(`./uploads/${hashedName}`);
+        const name = req.file.originalname;
+        const hashedName = req.file.filename;
+        const path = req.file.originalname;
+        const size = req.file.size;
+        const folderId = req.currentFolder.id;
+        const newFile = await query.uploadFile(name, hashedName, path, size, folderId);
 
-    // Redirect to driveGet
-    return res.redirect(req.currentUrl);
-});
+        // console.log(cloudinary);
+        // const result = await cloudinary.uploader.upload(`./uploads/${hashedName}`);
+
+        // Redirect to driveGet
+        return res.redirect(req.currentUrl);
+    }),
+];
 
 exports.deleteFileDelete = asyncHandler(async (req, res) => {
     const file = await query.deleteFile(req.body.file_id);

@@ -33,5 +33,6 @@ exports.driveGet = asyncHandler(async (req, res) => {
     return res.render("drive", {
         currentFolder: req.currentFolder,
         pathArray: req.pathArray,
+        folderExists: req.flash("folderExists"),
     });
 });
