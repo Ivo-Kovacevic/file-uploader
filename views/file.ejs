@@ -7,11 +7,17 @@
     <p class="text-sm">Created at: <span class="font-bold"> <%= file.createdAt %> </span> </p>
     <p class="text-sm">Updated at: <span class="font-bold"> <%= file.updatedAt %> </span></p>
     <p class="text-sm">Size: <span class="font-bold"> <%= file.size %> bytes </span></p>
+
     <h2 class="text-2xl mt-2">Content:</h2>
-    <p> <%= file.content %> </p>
+    <% const arrayOfLines = file.content.split("\n"); %>
+    <% let i = 1; %>
+    <% arrayOfLines.forEach(line => { %>
+    <p> <%- i %> | <%- line %> </p>
+    <% i++; %>
+    <% }) %>
 </div>
 
-<form action="<%= currentUrl %>/_file" method="post" class="edit-file flex flex-col w-min hidden">
+<form action="<%= currentUrl %>" method="post" class="edit-file flex flex-col w-min hidden">
     <input type="hidden" name="_method" value="PUT">
     <input type="hidden" name="file_id" value="<%= file.id %>">
 
@@ -28,7 +34,7 @@
     <input type="text" name="size" id="size" value="<%= file.size %> bytes" class="border-2 border-gray-300 bg-gray-200 text-gray-500 text-sm mb-4" disabled>
 
     <label for="file_content">Content:</label>
-    <textarea name="file_content" id="file_content" cols="30" rows="10" class="border-2 border-gray-400 mb-4"><%= file.content %></textarea>
+    <textarea name="file_content" id="file_content" cols="30" rows="10" class="border-2 border-gray-400 mb-4"> <%- file.content %> </textarea>
 
     <button class="mt-4 px-8 py-2 w-full border-2 text-white bg-blue-500 border-blue-500 rounded-xl font-bold hover:bg-blue-700 hover:border-blue-700">Save changes</button>
 </form>

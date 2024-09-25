@@ -90,3 +90,30 @@ exports.readFile = async (fileName, folderId) => {
         await prisma.$disconnect();
     }
 };
+
+exports.changeFile = async (newFileName, fileId, folderId) => {
+    try {
+        const existingFile = await prisma.file.findFirst({
+            where: {
+                name: newFileName,
+                folderId: parseInt(folderId),
+            },
+        });
+        if (existingFile && existingFile.id !== parseInt(fileId)) {
+            return "File name already exists";
+        }
+        return await prisma.file.update({
+            where: {
+                id: parseInt(fileId),
+            },
+            data: {
+                name: newFileName,
+            },
+        });
+    } catch (error) {
+        console.error(error);
+        throw error;
+    } finally {
+        await prisma.$disconnect();
+    }
+};

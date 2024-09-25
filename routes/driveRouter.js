@@ -14,7 +14,7 @@ driveRouter.get("/logout", driveController.logoutGet);
 driveRouter.post("*_folder", folderController.createFolderPost);
 driveRouter.post("*_file", fileController.uploadFilePost);
 
-driveRouter.put("*/:name/_file", fileController.changeFilePut);
+driveRouter.put("*/:name", fileController.changeFilePut);
 
 driveRouter.patch("*_folder", folderController.renameFolderPatch);
 driveRouter.patch("*_file", fileController.renameFilePatch);

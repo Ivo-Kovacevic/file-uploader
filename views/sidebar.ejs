@@ -11,7 +11,7 @@
             </div>
         </li>
         <li>
-            <% if (!locals.fileContent) { %>
+            <% if (!locals.file) { %>
             <form action="<%= currentUrl %>/_folder" method="post" class="mb-8 p-1 flex flex-col rounded-xl text-black bg-white text-center">
                 <label for="folder_name">Create new folder</label>
                 <input type="text" name="folder_name" id="folder_name" placeholder="Folder name" class="p-2 rounded-xl border-2 border-gray-400" value="<%= locals.folderName && folderName.newFolder ? folderName.newFolder : '' %>" required>

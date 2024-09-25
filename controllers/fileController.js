@@ -1,4 +1,5 @@
 const fs = require("fs");
+const path = require("path");
 const query = require("../db/fileQueries");
 const upload = require("../config/multerConfig");
 const asyncHandler = require("express-async-handler");
@@ -37,16 +38,29 @@ exports.renameFilePatch = asyncHandler(async (req, res) => {
 });
 
 exports.changeFilePut = asyncHandler(async (req, res) => {
-    const fileName = req.body.file_name;
+    const prevFileName = decodeURIComponent(req.params.name);
+    const newFileName = req.body.file_name;
     const fileId = req.body.file_id;
-    const parentFolderId = req.currentFolder.id;
-    const file = await query.renameFile(fileName, fileId, parentFolderId);
+    const fileContent = req.body.file_content;
+    const parentFolderId = req.fileFolderId;
+    const file = await query.changeFile(newFileName, fileId, parentFolderId);
     if (file === "File name already exists") {
         req.flash("fileExists", "File name already exists");
+        return res.redirect(req.currentUrl);
     }
 
+    fs.writeFile(path.join(__dirname, "../uploads", file.hashedName), fileContent, (err) => {
+        if (err) {
+            console.error(err);
+        }
+    });
+
     // Redirect to driveGet
-    return res.redirect(req.currentUrl);
+    req.pathArray.pop();
+    req.pathArray.push(file.name);
+    const urlNewFile = req.pathArray.join("/");
+
+    return res.redirect(`/${urlNewFile}`);
 });
 
 exports.deleteFileDelete = asyncHandler(async (req, res) => {
@@ -82,11 +96,13 @@ exports.readFileGet = asyncHandler(async (req, res, next) => {
                 return;
             }
             file.content = data;
+            const test = data.split("\n");
             return res.render("drive", {
                 pathArray: req.pathArray,
                 file: file,
             });
         });
+
         return;
     }
     next();

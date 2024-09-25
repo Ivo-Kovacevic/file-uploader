@@ -706,6 +706,14 @@ video {
   max-height: 3rem;
 }
 
+.min-h-4 {
+  min-height: 1rem;
+}
+
+.min-h-8 {
+  min-height: 2rem;
+}
+
 .w-8 {
   width: 2rem;
 }
