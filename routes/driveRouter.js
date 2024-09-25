@@ -12,16 +12,13 @@ driveRouter.use(currentFolderMiddleware);
 driveRouter.get("/logout", driveController.logoutGet);
 
 driveRouter.post("*_folder", folderController.createFolderPost);
-driveRouter.post("*_file", fileController.uploadFilePost);
-
-driveRouter.put("*/:name", fileController.changeFilePut);
-
 driveRouter.patch("*_folder", folderController.renameFolderPatch);
-driveRouter.patch("*_file", fileController.renameFilePatch);
-
 driveRouter.delete("*_folder", folderController.deleteFolderDelete);
-driveRouter.delete("*_file", fileController.deleteFileDelete);
 
+driveRouter.post("*_file", fileController.uploadFilePost);
+driveRouter.patch("*_file", fileController.renameFilePatch);
+driveRouter.delete("*_file", fileController.deleteFileDelete);
+driveRouter.put("*/:name", fileController.changeFilePut);
 driveRouter.get("*/:name", fileController.readFileGet);
 
 driveRouter.get("/*", driveController.driveGet);

@@ -17,7 +17,7 @@ exports.logoutGet = asyncHandler(async (req, res, next) => {
 exports.driveGet = asyncHandler(async (req, res) => {
     // Render invalid page folder if doesn't exist
     if (req.currentFolder === null) {
-        return res.render("invalid");
+        return res.render("invalidFolder");
     }
     return res.render("drive", {
         currentFolder: req.currentFolder,

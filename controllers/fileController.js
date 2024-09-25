@@ -37,6 +37,28 @@ exports.renameFilePatch = asyncHandler(async (req, res) => {
     return res.redirect(req.currentUrl);
 });
 
+exports.deleteFileDelete = asyncHandler(async (req, res) => {
+    const file = await query.deleteFile(req.body.file_id);
+
+    // Delete file from system
+    const path = require("path");
+    const filePath = path.join("uploads", file.hashedName);
+    if (fs.existsSync(filePath)) {
+        fs.unlink(filePath, (err) => {
+            if (err) {
+                console.error("Error deleting the file:", err);
+                throw err;
+            }
+            console.log(`File ${file.hashedName} deleted successfully.`);
+        });
+    } else {
+        console.log(`File ${file.hashedName} does not exist.`);
+    }
+
+    // Redirect to driveGet
+    return res.redirect(req.currentUrl);
+});
+
 exports.changeFilePut = asyncHandler(async (req, res) => {
     const prevFileName = decodeURIComponent(req.params.name);
     const newFileName = req.body.file_name;
@@ -61,28 +83,6 @@ exports.changeFilePut = asyncHandler(async (req, res) => {
     const urlNewFile = req.pathArray.join("/");
 
     return res.redirect(`/${urlNewFile}`);
-});
-
-exports.deleteFileDelete = asyncHandler(async (req, res) => {
-    const file = await query.deleteFile(req.body.file_id);
-
-    // Delete file from system
-    const path = require("path");
-    const filePath = path.join("uploads", file.hashedName);
-    if (fs.existsSync(filePath)) {
-        fs.unlink(filePath, (err) => {
-            if (err) {
-                console.error("Error deleting the file:", err);
-                throw err;
-            }
-            console.log(`File ${file.hashedName} deleted successfully.`);
-        });
-    } else {
-        console.log(`File ${file.hashedName} does not exist.`);
-    }
-
-    // Redirect to driveGet
-    return res.redirect(req.currentUrl);
 });
 
 exports.readFileGet = asyncHandler(async (req, res, next) => {

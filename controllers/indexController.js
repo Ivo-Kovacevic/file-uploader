@@ -6,11 +6,11 @@ const { validateNewUser } = require("../validation/user-validation");
 const asyncHandler = require("express-async-handler");
 
 exports.indexGet = asyncHandler(async (req, res) => {
-    res.render("index");
+    return res.render("index");
 });
 
 exports.loginGet = asyncHandler(async (req, res) => {
-    res.render("login");
+    return res.render("login");
 });
 
 exports.loginPost = (req, res, next) => {
@@ -35,7 +35,7 @@ exports.loginPost = (req, res, next) => {
 };
 
 exports.registerGet = asyncHandler(async (req, res) => {
-    res.render("register");
+    return res.render("register");
 });
 
 exports.registerPost = [
@@ -50,10 +50,7 @@ exports.registerPost = [
         }
 
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
-        const newUser = await query.registerUser(
-            req.body.username,
-            hashedPassword
-        );
+        const newUser = await query.registerUser(req.body.username, hashedPassword);
 
         req.logIn(newUser, (err) => {
             if (err) {
@@ -65,5 +62,5 @@ exports.registerPost = [
 ];
 
 exports.invalidPage = asyncHandler(async (req, res) => {
-    res.render("noPage");
-})
+    return res.render("invalidPage");
+});
