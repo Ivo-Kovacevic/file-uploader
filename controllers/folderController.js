@@ -28,7 +28,7 @@ exports.createFolderPost = [
     }),
 ];
 
-exports.renameFolderPut = [
+exports.renameFolderPatch = [
     validateNewFolder,
     asyncHandler(async (req, res, next) => {
         const errors = validationResult(req);

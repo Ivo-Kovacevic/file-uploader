@@ -23,7 +23,20 @@ exports.uploadFilePost = [
     }),
 ];
 
-exports.renameFilePut = asyncHandler(async (req, res) => {
+exports.renameFilePatch = asyncHandler(async (req, res) => {
+    const fileName = req.body.file_name;
+    const fileId = req.body.file_id;
+    const parentFolderId = req.currentFolder.id;
+    const file = await query.renameFile(fileName, fileId, parentFolderId);
+    if (file === "File name already exists") {
+        req.flash("fileExists", "File name already exists");
+    }
+
+    // Redirect to driveGet
+    return res.redirect(req.currentUrl);
+});
+
+exports.changeFilePut = asyncHandler(async (req, res) => {
     const fileName = req.body.file_name;
     const fileId = req.body.file_id;
     const parentFolderId = req.currentFolder.id;
@@ -68,9 +81,10 @@ exports.readFileGet = asyncHandler(async (req, res, next) => {
                 console.error(err);
                 return;
             }
+            file.content = data;
             return res.render("drive", {
                 pathArray: req.pathArray,
-                fileContent: data,
+                file: file,
             });
         });
         return;

@@ -6,7 +6,7 @@
     </a>
     <div class="folder-file-name-form hidden">
         <form action="<%= currentUrl %>/_file" method="post" class="flex">
-            <input type="hidden" name="_method" value="PUT">
+            <input type="hidden" name="_method" value="PATCH">
             <input type="text" name="file_name" value="<%= file.name %>" class="w-full border-2 border-gray-400">
             <input type="hidden" name="file_id" value="<%= file.id %>">
             <button class="w-8 h-8 text-white bg-blue-500">></button>

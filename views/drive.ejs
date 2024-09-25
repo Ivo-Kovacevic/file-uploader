@@ -8,6 +8,7 @@
     <link rel="shortcut icon" href="/images/logo/logo.ico" type="image/x-icon" />
     <script src="/js/display-file-name-in-label.js" defer></script>
     <script src="/js/rename.js" defer></script>
+    <script src="/js/edit-file.js" defer></script>
     <title>OnlyFiles</title>
 </head>
 
@@ -35,9 +36,8 @@
             </div>
 
             <!-- Display file content if file is opened -->
-            <% if (locals.fileContent) { %>
-            <h2 class="mt-8 text-2xl">File content:</h2>
-            <p> <%= fileContent %></p>
+            <% if (locals.file) { %>
+            <%- include("file") %>
 
             <!-- Display folders and files -->
             <% } else { %>
@@ -46,7 +46,7 @@
 
                 <%- include("folderList") %>
                 <%- include("fileList") %>
-                
+
                 <% } %>
             </div>
             <% } %>

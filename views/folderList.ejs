@@ -6,7 +6,7 @@
     </a>
     <div class="folder-file-name-form hidden">
         <form action="<%= currentUrl %>/_folder" method="post" class="flex">
-            <input type="hidden" name="_method" value="PUT">
+            <input type="hidden" name="_method" value="PATCH">
             <input type="text" name="folder_name" value="<%= subfolder.name %>" class="w-full border-2 border-gray-400">
             <input type="hidden" name="folder_id" value="<%= subfolder.id %>">
             <button class="w-8 h-8 text-white bg-blue-500">></button>
