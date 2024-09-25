@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 
 exports.registerUser = async (username, password) => {
     try {
-        await prisma.user.create({
+        return await prisma.user.create({
             data: {
                 username: username,
                 password: password,
@@ -16,12 +16,6 @@ exports.registerUser = async (username, password) => {
                 },
             },
         });
-        const allUsers = await prisma.user.findUnique({
-            where: {
-                username: username,
-            },
-        });
-        return allUsers;
     } catch (error) {
         console.error("Error while registering user: ", error);
         throw error;
@@ -32,12 +26,11 @@ exports.registerUser = async (username, password) => {
 
 exports.getUserByUsername = async (username) => {
     try {
-        const user = await prisma.user.findUnique({
+        return (user = await prisma.user.findUnique({
             where: {
                 username: username,
             },
-        });
-        return user;
+        }));
     } catch (error) {
         console.error(error);
         throw error;
@@ -48,15 +41,14 @@ exports.getUserByUsername = async (username) => {
 
 exports.getUserById = async (id) => {
     try {
-        const user = await prisma.user.findUnique({
+        return (user = await prisma.user.findUnique({
             where: {
                 id: id,
             },
             include: {
                 folders: true,
             },
-        });
-        return user;
+        }));
     } catch (error) {
         console.error(error);
         throw error;

@@ -14,7 +14,7 @@ exports.createNewFolder = async (newFolderName, userId, parentId) => {
         if (existingFolder) {
             return "Folder name already exists";
         }
-        const folder = await prisma.folder.create({
+        return await prisma.folder.create({
             data: {
                 name: newFolderName,
                 user: {
@@ -29,7 +29,6 @@ exports.createNewFolder = async (newFolderName, userId, parentId) => {
                 },
             },
         });
-        return folder;
     } catch (error) {
         console.error(error);
         throw error;
@@ -95,7 +94,7 @@ exports.renameFolder = async (folderName, folderId, userId, parentId) => {
         if (existingFolder) {
             return "Folder name already exists";
         }
-        const folder = await prisma.folder.update({
+        return await prisma.folder.update({
             where: {
                 id: parseInt(folderId),
             },
@@ -103,7 +102,6 @@ exports.renameFolder = async (folderName, folderId, userId, parentId) => {
                 name: folderName,
             },
         });
-        return folder;
     } catch (error) {
         console.error(error);
         throw error;

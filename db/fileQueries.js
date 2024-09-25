@@ -45,7 +45,7 @@ exports.renameFile = async (fileName, fileId, folderId) => {
         if (existingFile) {
             return "File name already exists";
         }
-        const file = await prisma.file.update({
+        return await prisma.file.update({
             where: {
                 id: parseInt(fileId),
             },
@@ -53,7 +53,6 @@ exports.renameFile = async (fileName, fileId, folderId) => {
                 name: fileName,
             },
         });
-        return file;
     } catch (error) {
         console.error(error);
         throw error;
