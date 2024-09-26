@@ -20,6 +20,7 @@ driveRouter.patch("*_file", fileController.renameFilePatch);
 driveRouter.delete("*_file", fileController.deleteFileDelete);
 driveRouter.put("*/:name", fileController.changeFilePut);
 driveRouter.get("*/:name", fileController.readFileGet);
+driveRouter.post("*_download", fileController.downloadFileGet);
 
 driveRouter.get("/*", driveController.driveGet);
 

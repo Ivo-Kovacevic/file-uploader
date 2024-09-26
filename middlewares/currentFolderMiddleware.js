@@ -5,6 +5,7 @@ exports.currentFolderMiddleware = asyncHandler(async (req, res, next) => {
     // Add current folder contents and url path array to the request
     const pathArray = req.originalUrl.split("/").filter((item) => item !== "");
     if (
+        pathArray[pathArray.length - 1] === "_download" ||
         pathArray[pathArray.length - 1] === "_folder" ||
         pathArray[pathArray.length - 1] === "_file"
     ) {

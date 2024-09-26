@@ -74,12 +74,27 @@ exports.deleteFile = async (fileId) => {
     }
 };
 
-exports.readFile = async (fileName, folderId) => {
+exports.getFileByName = async (fileName, folderId) => {
     try {
         return await prisma.file.findMany({
             where: {
                 name: fileName,
                 folderId: folderId,
+            },
+        });
+    } catch (error) {
+        console.error(error);
+        throw error;
+    } finally {
+        await prisma.$disconnect();
+    }
+};
+
+exports.getFileById = async (fileId) => {
+    try {
+        return await prisma.file.findUnique({
+            where: {
+                id: parseInt(fileId),
             },
         });
     } catch (error) {

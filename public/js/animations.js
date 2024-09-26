@@ -9,7 +9,6 @@ function raf(time) {
 requestAnimationFrame(raf);
 
 gsap.registerPlugin(ScrollTrigger);
-
 function heroAnimation(target) {
     return gsap
         .timeline({
@@ -47,7 +46,6 @@ function fadeTechStack(target, direction = "in") {
             { x: direction === "in" ? 0 : 500, opacity: direction === "in" ? 1 : 0, duration: 1 }
         );
 }
-
 [".node-express", ".passport", ".postgre", ".prisma", ".tailwind", ".gsap"].forEach((target) => {
     fadeTechStack(target, "in");
     fadeTechStack(target, "out");

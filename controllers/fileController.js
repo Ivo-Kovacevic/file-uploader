@@ -41,7 +41,6 @@ exports.deleteFileDelete = asyncHandler(async (req, res) => {
     const file = await query.deleteFile(req.body.file_id);
 
     // Delete file from system
-    const path = require("path");
     const filePath = path.join("uploads", file.hashedName);
     if (fs.existsSync(filePath)) {
         fs.unlink(filePath, (err) => {
@@ -88,11 +87,28 @@ exports.changeFilePut = asyncHandler(async (req, res) => {
     return res.redirect(`/${urlNewFile}`);
 });
 
+exports.downloadFileGet = asyncHandler(async (req, res, next) => {
+    const fileId = req.body.file_id;
+    const file = await query.getFileById(fileId);
+    if (file) {
+        const filePath = path.join(__dirname, "../uploads", file.hashedName);
+        res.download(filePath, file.name, (err) => {
+            if (err) {
+                console.error(err);
+                res.status(500).send("Could not download the file.");
+            } else {
+                console.log("File downloaded successfully.");
+            }
+        });
+        return;
+    }
+    next();
+});
+
 exports.readFileGet = asyncHandler(async (req, res, next) => {
     const fileName = decodeURIComponent(req.params.name);
-    const [file] = await query.readFile(fileName, req.fileFolderId);
+    const [file] = await query.getFileByName(fileName, req.fileFolderId);
     if (file) {
-        const path = require("path");
         fs.readFile(path.join(__dirname, "../uploads", file.hashedName), "utf8", (err, data) => {
             if (err) {
                 console.error(err);
@@ -105,7 +121,6 @@ exports.readFileGet = asyncHandler(async (req, res, next) => {
                 file: file,
             });
         });
-
         return;
     }
     next();

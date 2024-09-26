@@ -6,6 +6,10 @@
         <input type="hidden" name="file_id" value="<%= file.id %>">
         <button class="m-4 px-8 py-2 border-2 text-white bg-red-500 border-red-500 rounded-xl font-bold hover:bg-red-700 hover:border-red-700">Delete file</button>
     </form>
+    <form action="<%= currentUrl %>/_download" method="post" class="flex justify-center">
+        <input type="hidden" name="file_id" value="<%= file.id %>">
+        <button class="m-4 px-8 py-2 border-2 text-white bg-green-500 border-green-500 rounded-xl font-bold hover:bg-green-700 hover:border-green-700">Download file</button>
+    </form>
 </div>
 
 <div class="display-file">
