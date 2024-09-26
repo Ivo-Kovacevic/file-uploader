@@ -54,9 +54,12 @@ exports.deleteFileDelete = asyncHandler(async (req, res) => {
     } else {
         console.log(`File ${file.hashedName} does not exist.`);
     }
+    // Remove file name from the path array so file can be deleted both from folder and file itself
+    req.pathArray.pop();
+    const url = req.pathArray.join("/");
 
     // Redirect to driveGet
-    return res.redirect(req.currentUrl);
+    return res.redirect(`/${url}`);
 });
 
 exports.changeFilePut = asyncHandler(async (req, res) => {

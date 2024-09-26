@@ -14,7 +14,7 @@
     </div>
     <div class="flex justify-evenly">
         <p class="rename w-m text-sm text-center cursor-pointer hover:text-blue-700">Rename</p>
-        <form action="<%= currentUrl %>/_file" method="post" class="flex justify-center">
+        <form action="<%= currentUrl %>/<%= file.name %>/_file" method="post" class="flex justify-center">
             <input type="hidden" name="_method" value="DELETE">
             <input type="hidden" name="file_id" value="<%= file.id %>">
             <button class="w-m text-sm text-center hover:text-red-700">Delete</button>

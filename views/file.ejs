@@ -1,5 +1,11 @@
+<!-- File action buttons -->
 <div class="flex items-center cursor-pointer hover:text-blue-700">
-    <p class="edit-file-button my-2 w-m text-center cursor-pointer">Edit file</p>
+    <p class="edit-file-button m-4 px-8 py-2 border-2 text-white bg-blue-500 border-blue-500 rounded-xl font-bold hover:bg-blue-700 hover:border-blue-700">Edit file</p>
+    <form action="<%= currentUrl %>/_file" method="post" class="flex justify-center">
+        <input type="hidden" name="_method" value="DELETE">
+        <input type="hidden" name="file_id" value="<%= file.id %>">
+        <button class="m-4 px-8 py-2 border-2 text-white bg-red-500 border-red-500 rounded-xl font-bold hover:bg-red-700 hover:border-red-700">Delete file</button>
+    </form>
 </div>
 
 <div class="display-file">
@@ -25,13 +31,13 @@
     <input type="text" name="file_name" id="file_name" value="<%= file.name %>" class="border-2 border-gray-400 text-4xl mb-4">
 
     <label for="createdAt" class="text-gray-500 text-sm">Created at</label>
-    <input type="text" name="createdAt" id="createdAt" value="<%= file.createdAt %>" class="border-2 border-gray-300 bg-gray-200 text-gray-500 text-sm mb-4" disabled>
+    <input type="text" name="createdAt" id="createdAt" value="<%= file.createdAt %>" class="border-2 border-gray-300 bg-gray-200 text-gray-500 text-sm mb-4 cursor-not-allowed" disabled>
 
     <label for="updatedAt" class="text-gray-500 text-sm">Updated at</label>
-    <input type="text" name="updatedAt" id="updatedAt" value="<%= file.updatedAt %>" class="border-2 border-gray-300 bg-gray-200 text-gray-500 text-sm mb-4" disabled>
+    <input type="text" name="updatedAt" id="updatedAt" value="<%= file.updatedAt %>" class="border-2 border-gray-300 bg-gray-200 text-gray-500 text-sm mb-4 cursor-not-allowed" disabled>
 
     <label for="size" class="text-gray-500 text-sm">Size</label>
-    <input type="text" name="size" id="size" value="<%= file.size %> bytes" class="border-2 border-gray-300 bg-gray-200 text-gray-500 text-sm mb-4" disabled>
+    <input type="text" name="size" id="size" value="<%= file.size %> bytes" class="border-2 border-gray-300 bg-gray-200 text-gray-500 text-sm mb-4 cursor-not-allowed" disabled>
 
     <label for="file_content">Content:</label>
     <textarea name="file_content" id="file_content" cols="30" rows="10" class="border-2 border-gray-400 mb-4"> <%- file.content %> </textarea>
