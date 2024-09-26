@@ -18,7 +18,7 @@
     <% const arrayOfLines = file.content.split("\n"); %>
     <% let i = 1; %>
     <% arrayOfLines.forEach(line => { %>
-    <p> <%- i %> | <%- line %> </p>
+    <p> <%= i %> | <%= line %> </p>
     <% i++; %>
     <% }) %>
 </div>
@@ -40,7 +40,7 @@
     <input type="text" name="size" id="size" value="<%= file.size %> bytes" class="border-2 border-gray-300 bg-gray-200 text-gray-500 text-sm mb-4 cursor-not-allowed" disabled>
 
     <label for="file_content">Content:</label>
-    <textarea name="file_content" id="file_content" cols="30" rows="10" class="border-2 border-gray-400 mb-4"> <%- file.content %> </textarea>
+    <textarea name="file_content" id="file_content" cols="30" rows="10" class="border-2 border-gray-400 mb-4"> <%= file.content %> </textarea>
 
     <button class="mt-4 px-8 py-2 w-full border-2 text-white bg-blue-500 border-blue-500 rounded-xl font-bold hover:bg-blue-700 hover:border-blue-700">Save changes</button>
 </form>

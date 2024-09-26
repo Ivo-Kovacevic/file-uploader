@@ -17,7 +17,10 @@
                 <h1 class="mb-8 text-3xl font-bold">Register</h1>
 
                 <label for="username" class="mt-8">Username</label>
-                <input type="text" name="username" id="username" class="p-2 rounded-xl border-2 border-gray-400" value="<%= locals.userData && userData.username ? userData.username : '' %>"  required />
+                <input type="text" name="username" id="username" class="p-2 rounded-xl border-2 border-gray-400" value="<%= locals.userData && userData.username ? userData.username : '' %>" required />
+                <% if (locals.usernameTaken) { %>
+                <p class="text-red-700">Username is taken</p>
+                <% } %>
                 <%- include('partials/usernameErrors') %>
 
                 <label for="password" class="mt-8">Password</label>

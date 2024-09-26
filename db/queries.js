@@ -5,6 +5,10 @@ const prisma = new PrismaClient();
 
 exports.registerUser = async (username, password) => {
     try {
+        const existingUser = await exports.getUserByUsername(username);
+        if (existingUser) {
+            return "Username is taken";
+        }
         return await prisma.user.create({
             data: {
                 username: username,
