@@ -6,18 +6,77 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/stylesheets/output.css" />
     <link rel="shortcut icon" href="/images/logo/logo.ico" type="image/x-icon" />
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+    <script type="module" src="/js/animations.js" defer></script>
+    <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+
     <title>OnlyFiles</title>
 </head>
 
 <body>
     <%- include("header") %>
     <div class="container mx-auto px-4">
-        <div class="my-64 flex flex-col items-center">
+
+        <div class="hero mt-64 mb-60 flex flex-col items-center">
             <h1 class="text-4xl md:text-6xl text-center">Store your files online</h1>
-            <a href="<%= locals.currentUser ? "drive" : "register" %>" class="m-4 px-8 py-2 border-2 border-blue-500 rounded-xl font-bold hover:bg-blue-500 hover:text-white transition duration-200">
+            <a href="<%= locals.currentUser ? "drive" : "register" %>" class="m-4 px-8 py-2 border-2 text-blue-700 border-blue-700 rounded-xl font-bold hover:bg-blue-700 hover:text-white transition duration-200">
                 <%= locals.currentUser ? "Open Drive" : "Get started" %>
             </a>
         </div>
+
+        <div class="flex flex-col justify-center items-center animate-bounce">
+            <h2 class="arrow text-blue-500">How it works</h2>
+            <svg class="arrow h-16 w-16 fill-blue-500" height="800px" width="800px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 330 330" xml:space="preserve">
+                <g id="XMLID_169_">
+                    <path id="XMLID_197_" d="M304.394,139.394l-139.39,139.393L25.607,139.393c-5.857-5.857-15.355-5.858-21.213,0.001
+                    c-5.858,5.858-5.858,15.355,0,21.213l150.004,150c2.813,2.813,6.628,4.393,10.606,4.393s7.794-1.581,10.606-4.394l149.996-150
+		            c5.858-5.858,5.858-15.355,0-21.213C319.749,133.536,310.251,133.535,304.394,139.394z" />
+                    <path id="XMLID_221_" d="M154.398,190.607c2.813,2.813,6.628,4.393,10.606,4.393s7.794-1.581,10.606-4.394l149.996-150
+		            c5.858-5.858,5.858-15.355,0-21.213c-5.857-5.858-15.355-5.858-21.213,0l-139.39,139.393L25.607,19.393
+		            c-5.857-5.858-15.355-5.858-21.213,0c-5.858,5.858-5.858,15.355,0,21.213L154.398,190.607z" />
+                </g>
+            </svg>
+        </div>
+
+        <div class="mx-0 sm:mx-8 lg:mx-24 my-96 flex flex-col gap-96 text-2xl md:text-4xl lg:text-5xl">
+
+            <div class="node-express flex items-center">
+                <div class="max-w-96">
+                    <img src="/images/intro/node.webp" alt="" class="p-8">
+                    <img src="/images/intro/express.webp" alt="" class="p-8">
+                </div>
+                <h1>App manages server-side operations with Node.js and Express</h1>
+            </div>
+
+            <div class="passport flex items-center">
+                <img src="/images/intro/passport.webp" alt="" class="max-w-96 p-8">
+                <h1>Passport.js is used to handle user authentication and sessions</h1>
+            </div>
+
+            <div class="postgre flex items-center">
+                <img src="/images/intro/postgre.webp" alt="" class="max-w-96 p-8">
+                <h1>Application utilizes PostgreSQL as its database to efficiently store and manage user data</h1>
+            </div>
+
+            <div class="prisma flex items-center">
+                <img src="/images/intro/prisma.webp" alt="" class="max-w-96 p-8">
+                <h1>Prisma is used as an ORM for interacting with database</h1>
+            </div>
+
+            <div class="tailwind flex items-center">
+                <img src="/images/intro/tailwind.webp" alt="" class="max-w-96 p-8">
+                <h1>Tailwind CSS for rapid and responsive styling</h1>
+            </div>
+
+            <div class="gsap flex items-center">
+                <img src="/images/intro/gsap.webp" alt="" class="max-w-96 p-8">
+                <h1>And finally all these animations were made with GSAP</h1>
+            </div>
+
+        </div>
+
     </div>
 </body>
 
