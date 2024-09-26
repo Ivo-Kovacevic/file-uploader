@@ -3,6 +3,7 @@ const path = require("path");
 const query = require("../db/fileQueries");
 const upload = require("../config/multerConfig");
 const asyncHandler = require("express-async-handler");
+const supabase = require("../config/supabaseConfig");
 
 exports.uploadFilePost = [
     upload.single("upload_file"),
