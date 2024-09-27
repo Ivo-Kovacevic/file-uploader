@@ -9,46 +9,40 @@ function raf(time) {
 requestAnimationFrame(raf);
 
 gsap.registerPlugin(ScrollTrigger);
-function heroAnimation(target) {
-    return gsap
-        .timeline({
-            scrollTrigger: {
-                trigger: target,
-                start: "top 20%",
-                end: "bottom top",
-                scrub: 2,
-                markers: false,
-            },
-        })
-        .to(target, {
-            x: 400,
-            opacity: 0,
-            duration: 1,
-        });
-}
-heroAnimation(".hero");
-heroAnimation(".arrow");
 
-function fadeTechStack(target, direction = "in") {
-    return gsap
-        .timeline({
-            scrollTrigger: {
-                trigger: target,
-                start: direction === "in" ? "top bottom" : "top 10%",
-                end: direction === "in" ? "bottom 90%" : "bottom top",
-                scrub: 2,
-                markers: false,
-            },
-        })
-        .fromTo(
-            target,
-            { x: direction === "in" ? -500 : 0, opacity: direction === "in" ? 0 : 1 },
-            { x: direction === "in" ? 0 : 500, opacity: direction === "in" ? 1 : 0, duration: 1 }
-        );
+function heroAnimation(target, trigger) {
+    return gsap.to(target, {
+        x: 400,
+        opacity: 0,
+        scrollTrigger: {
+            trigger: trigger,
+            start: "top 20%",
+            end: "bottom top",
+            scrub: true,
+            markers: true,
+        },
+    });
 }
-[".node-express", ".passport", ".supabase", ".postgre", ".prisma", ".tailwind", ".gsap"].forEach(
-    (target) => {
-        fadeTechStack(target, "in");
-        fadeTechStack(target, "out");
-    }
-);
+heroAnimation(".hero", ".hero-trigger");
+heroAnimation(".arrow", ".arrow-trigger");
+
+function fadeInTechStack(target, trigger) {
+    return gsap.from(target, {
+        x: -400,
+        opacity: 0,
+        scrollTrigger: {
+            trigger: trigger,
+            start: "top bottom",
+            end: "bottom 90%",
+            scrub: true,
+            markers: true,
+        },
+    });
+}
+fadeInTechStack(".node-express", ".node-express-trigger");
+fadeInTechStack(".passport", ".passport-trigger");
+fadeInTechStack(".supabase", ".supabase-trigger");
+fadeInTechStack(".postgre", ".postgre-trigger");
+fadeInTechStack(".prisma", ".prisma-trigger");
+fadeInTechStack(".tailwind", ".tailwind-trigger");
+fadeInTechStack(".gsap", ".gsap-trigger");
