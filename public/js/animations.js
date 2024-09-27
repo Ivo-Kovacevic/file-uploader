@@ -46,7 +46,9 @@ function fadeTechStack(target, direction = "in") {
             { x: direction === "in" ? 0 : 500, opacity: direction === "in" ? 1 : 0, duration: 1 }
         );
 }
-[".node-express", ".passport", ".postgre", ".prisma", ".tailwind", ".gsap"].forEach((target) => {
-    fadeTechStack(target, "in");
-    fadeTechStack(target, "out");
-});
+[".node-express", ".passport", ".supabase", ".postgre", ".prisma", ".tailwind", ".gsap"].forEach(
+    (target) => {
+        fadeTechStack(target, "in");
+        fadeTechStack(target, "out");
+    }
+);
