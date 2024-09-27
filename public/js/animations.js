@@ -10,21 +10,21 @@ requestAnimationFrame(raf);
 
 gsap.registerPlugin(ScrollTrigger);
 
-function heroAnimation(target, trigger) {
-    return gsap.to(target, {
-        x: 400,
-        opacity: 0,
-        scrollTrigger: {
-            trigger: trigger,
-            start: "top 20%",
-            end: "bottom top",
-            scrub: true,
-            markers: true,
-        },
-    });
-}
-heroAnimation(".hero", ".hero-trigger");
-heroAnimation(".arrow", ".arrow-trigger");
+// function heroAnimation(target, trigger) {
+//     return gsap.to(target, {
+//         x: 400,
+//         opacity: 0,
+//         scrollTrigger: {
+//             trigger: trigger,
+//             start: "top 20%",
+//             end: "bottom top",
+//             scrub: true,
+//             markers: false,
+//         },
+//     });
+// }
+// heroAnimation(".hero", ".hero-trigger");
+// heroAnimation(".arrow", ".arrow-trigger");
 
 function fadeInTechStack(target, trigger) {
     return gsap.from(target, {
@@ -34,8 +34,8 @@ function fadeInTechStack(target, trigger) {
             trigger: trigger,
             start: "top bottom",
             end: "bottom 90%",
-            scrub: true,
-            markers: true,
+            scrub: false,
+            markers: false,
         },
     });
 }
