@@ -1,30 +1,48 @@
-const lenis = new Lenis();
-lenis.on("scroll", (e) => {
-    console.log(e);
+// Lenis
+const lenis = new Lenis({
+    smooth: true,
 });
 function raf(time) {
     lenis.raf(time);
     requestAnimationFrame(raf);
 }
 requestAnimationFrame(raf);
+document.querySelectorAll('a[href^="#"]').forEach((el) => {
+    el.addEventListener("click", (e) => {
+        e.preventDefault();
+        const id = el.getAttribute("href")?.slice(1);
+        if (!id) return;
+        const target = document.getElementById(id);
+        if (target) {
+            // Update the URL without jumping
+            history.pushState(null, "", `#${id}`);
+            // Scroll to the target using Lenis
+            lenis.scrollTo(target.offsetTop, {
+                duration: 3,
+                easing: (t) => t * (2 - t),
+            });
+        }
+    });
+});
 
+// GSAP
 gsap.registerPlugin(ScrollTrigger);
 
-// function heroAnimation(target, trigger) {
-//     return gsap.to(target, {
-//         x: 400,
-//         opacity: 0,
-//         scrollTrigger: {
-//             trigger: trigger,
-//             start: "top 20%",
-//             end: "bottom top",
-//             scrub: true,
-//             markers: false,
-//         },
-//     });
-// }
-// heroAnimation(".hero", ".hero-trigger");
-// heroAnimation(".arrow", ".arrow-trigger");
+function heroAnimation(target, trigger) {
+    return gsap.to(target, {
+        x: 400,
+        opacity: 0,
+        scrollTrigger: {
+            trigger: trigger,
+            start: "top 20%",
+            end: "bottom top",
+            scrub: true,
+            markers: false,
+        },
+    });
+}
+heroAnimation(".hero", ".hero-trigger");
+heroAnimation(".arrow", ".arrow-trigger");
 
 function fadeInTechStack(target, trigger) {
     return gsap.from(target, {
@@ -32,9 +50,9 @@ function fadeInTechStack(target, trigger) {
         opacity: 0,
         scrollTrigger: {
             trigger: trigger,
-            start: "top bottom",
-            end: "bottom 90%",
-            scrub: false,
+            start: "top 90%",
+            end: "bottom 70%",
+            scrub: true,
             markers: false,
         },
     });

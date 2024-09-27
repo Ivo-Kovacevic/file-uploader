@@ -6,9 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/stylesheets/output.css" />
     <link rel="shortcut icon" href="/images/logo/logo.ico" type="image/x-icon" />
-    <script src="/js/file-name-label.js" defer></script>
     <script src="/js/rename.js" defer></script>
-    <script src="/js/edit-file.js" defer></script>
     <title>OnlyFiles</title>
 </head>
 
@@ -19,12 +17,14 @@
         <span class="text-4xl hover:cursor-pointer" onclick="this.parentElement.style.display='none';">&times;</span>
     </div>
     <% } %>
-    <div class="flex">
+    <div class="flex flex-col sm:flex-row">
 
         <%- include("sidebar") %>
 
         <!-- Root folder -->
         <div class="flex-1 p-8">
+
+            <!-- Folder path -->
             <div class="text-xl">
                 <% if (locals.pathArray) { %>
                 <% let cumulativePath = ''; %>
@@ -35,11 +35,11 @@
                 <% } %>
             </div>
 
-            <!-- Display file content if file is opened -->
+            <!-- If file is opened display it -->
             <% if (locals.file) { %>
             <%- include("file") %>
 
-            <!-- Display folders and files -->
+            <!-- Else display folders and files -->
             <% } else { %>
             <div class="pt-8 h-min grid gap-4 grid-cols-[repeat(auto-fill,minmax(8rem,1fr))]">
                 <% if(locals.currentFolder) { %>

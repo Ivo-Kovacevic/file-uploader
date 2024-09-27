@@ -1,17 +1,18 @@
-<!-- File action buttons -->
-<div class="flex items-center cursor-pointer hover:text-blue-700">
-    <p class="edit-file-button m-4 px-8 py-2 border-2 text-white bg-blue-500 border-blue-500 rounded-xl font-bold hover:bg-blue-700 hover:border-blue-700">Edit file</p>
+<!-- File buttons for editing, deleting and downloading -->
+<div class="flex justify-between items-center cursor-pointer hover:text-blue-700 text-sm">
+    <p class="edit-file-button sm:m-4 m-2 ml-0 sm:px-8 px-4 sm:py-2 py-1 border-2 text-white bg-blue-500 border-blue-500 rounded-xl sm:font-bold hover:bg-blue-700 hover:border-blue-700">Edit file</p>
     <form action="<%= currentUrl %>/_file" method="post" class="flex justify-center">
         <input type="hidden" name="_method" value="DELETE">
         <input type="hidden" name="file_id" value="<%= file.id %>">
-        <button class="m-4 px-8 py-2 border-2 text-white bg-red-500 border-red-500 rounded-xl font-bold hover:bg-red-700 hover:border-red-700">Delete file</button>
+        <button class="sm:m-4 m-2 sm:px-8 px-4 sm:py-2 py-1 border-2 text-white bg-red-500 border-red-500 rounded-xl font-bold hover:bg-red-700 hover:border-red-700">Delete file</button>
     </form>
     <form action="<%= currentUrl %>/_download" method="post" class="flex justify-center">
         <input type="hidden" name="file_id" value="<%= file.id %>">
-        <button class="m-4 px-8 py-2 border-2 text-white bg-green-500 border-green-500 rounded-xl font-bold hover:bg-green-700 hover:border-green-700">Download file</button>
+        <button class="sm:m-4 m-2 mr-0 sm:px-8 px-4 sm:py-2 py-1 border-2 text-white bg-green-500 border-green-500 rounded-xl font-bold hover:bg-green-700 hover:border-green-700">Download file</button>
     </form>
 </div>
 
+<!-- File info -->
 <div class="display-file">
     <h1 class="text-4xl"> <%= file.name %> </h1>
     <p class="text-sm">Created at: <span class="font-bold"> <%= file.createdAt %> </span> </p>
@@ -27,7 +28,8 @@
     <% }) %>
 </div>
 
-<form action="<%= currentUrl %>" method="post" class="edit-file flex flex-col w-min hidden">
+<!-- File form -->
+<form action="<%= currentUrl %>" method="post" class="edit-file flex flex-col hidden">
     <input type="hidden" name="_method" value="PUT">
     <input type="hidden" name="file_id" value="<%= file.id %>">
 
@@ -48,3 +50,21 @@
 
     <button class="mt-4 px-8 py-2 w-full border-2 text-white bg-blue-500 border-blue-500 rounded-xl font-bold hover:bg-blue-700 hover:border-blue-700">Save changes</button>
 </form>
+
+<!-- Script changes between displaying file info and form -->
+<script>
+    document.querySelector(".edit-file-button").addEventListener("click", (e) => {
+        const editFileButton = document.querySelector(".edit-file-button");
+        const displayFile = document.querySelector(".display-file");
+        const editFile = document.querySelector(".edit-file");
+
+        displayFile.classList.toggle("hidden");
+        editFile.classList.toggle("hidden");
+
+        if (editFileButton.textContent === "Edit file") {
+            editFileButton.textContent = "Cancel editing";
+        } else {
+            editFileButton.textContent = "Edit file";
+        }
+    });
+</script>

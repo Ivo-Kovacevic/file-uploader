@@ -1,4 +1,20 @@
-<div class="text-white bg-blue-500 max-w-xs">
+<!-- Mobile menu that shows on screens narrower than 640px -->
+<div class="flex p-4 text-white bg-blue-500 sm:hidden">
+    <div id="menu-button">
+        <svg width="50px" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 18L20 18" stroke="#ffffff" stroke-width="2" stroke-linecap="round" />
+            <path d="M4 12L20 12" stroke="#ffffff" stroke-width="2" stroke-linecap="round" />
+            <path d="M4 6L20 6" stroke="#ffffff" stroke-width="2" stroke-linecap="round" />
+        </svg>
+    </div>
+    <a href="/drive" class="flex pl-4 items-center text-4xl font-bold">OnlyFiles</a>
+</div>
+
+<!-- Overlay that can be clicked to close mobile menu -->
+<div id="overlay" class="fixed inset-0 bg-black opacity-50 hidden"></div>
+
+<!-- Main menu that shows on desktops and slides out on mobile when button is clicked -->
+<div id="menu" class="fixed -translate-x-full sm:static sm:translate-x-0 sm:flex sm:justify-center text-white bg-blue-500 w-80 h-full transform transition-transform duration-300 ease-in-out">
     <ul class="flex flex-col justify-start items-center gap-4 p-8 h-screen">
         <li>
             <a href="/drive" class="flex items-center text-4xl font-bold">OnlyFiles</a>
@@ -32,3 +48,31 @@
         <li class="mt-auto"><a href="/drive/logout">LOG OUT</a></li>
     </ul>
 </div>
+
+<script>
+    // Slides out menu on mobile by clicking and removes it by clicking overlay
+    document.getElementById('menu-button').addEventListener('click', () => {
+        const mobileMenu = document.getElementById('menu');
+        if (mobileMenu.classList.contains('-translate-x-full')) {
+            mobileMenu.classList.remove('-translate-x-full');
+            mobileMenu.classList.add('translate-x-0');
+            overlay.classList.remove('hidden');
+        } else {
+            mobileMenu.classList.remove('translate-x-0');
+            mobileMenu.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+        }
+        document.getElementById('overlay').addEventListener('click', () => {
+            mobileMenu.classList.remove('translate-x-0');
+            mobileMenu.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+        });
+    });
+
+    // Display picked file name in label
+    document.getElementById("upload_file").addEventListener("change", (event) => {
+        const label = document.getElementById("label_text");
+        const fileName = event.target.files.length > 0 ? event.target.files[0].name : "Select file";
+        label.textContent = fileName;
+    });
+</script>
