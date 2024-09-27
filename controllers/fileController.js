@@ -1,24 +1,41 @@
-const fs = require("fs");
-const path = require("path");
 const query = require("../db/fileQueries");
 const upload = require("../config/multerConfig");
 const asyncHandler = require("express-async-handler");
 const supabase = require("../config/supabaseConfig");
+const { v4: uuidv4 } = require("uuid");
+const axios = require("axios");
 
 exports.uploadFilePost = [
     upload.single("upload_file"),
     asyncHandler(async (req, res) => {
-        const url = req.pathArray.join("/");
-
-        const name = req.file.originalname;
-        const hashedName = req.file.filename;
-        const path = req.file.originalname;
-        const size = req.file.size;
+        const file = req.file;
+        const fileName = file.originalname;
+        const hashedName = uuidv4();
+        const size = file.size;
         const folderId = req.currentFolder.id;
-        const newFile = await query.uploadFile(name, hashedName, path, size, folderId);
+        const newFile = await query.storeFile(
+            fileName,
+            hashedName,
+            `/public/${hashedName}`,
+            size,
+            folderId
+        );
+        if (newFile === "File with that name already exists") {
+            return res.redirect(req.currentUrl);
+        }
 
-        // console.log(cloudinary);
-        // const result = await cloudinary.uploader.upload(`./uploads/${hashedName}`);
+        // Upload file to supabase
+        const { data, error } = await supabase.storage
+            .from("files")
+            .upload(`public/${hashedName}`, file.buffer, {
+                cacheControl: "3600",
+                upsert: false,
+            });
+        if (error) {
+            console.error("Supabase upload error:", error);
+            return res.status(500).send("Failed to upload file to Supabase.");
+        }
+        console.log("File uploaded to Supabase:", data);
 
         // Redirect to driveGet
         return res.redirect(req.currentUrl);
@@ -39,31 +56,33 @@ exports.renameFilePatch = asyncHandler(async (req, res) => {
 });
 
 exports.deleteFileDelete = asyncHandler(async (req, res) => {
-    const file = await query.deleteFile(req.body.file_id);
-
-    // Delete file from system
-    const filePath = path.join("uploads", file.hashedName);
-    if (fs.existsSync(filePath)) {
-        fs.unlink(filePath, (err) => {
-            if (err) {
-                console.error("Error deleting the file:", err);
-                throw err;
-            }
-            console.log(`File ${file.hashedName} deleted successfully.`);
-        });
-    } else {
-        console.log(`File ${file.hashedName} does not exist.`);
-    }
     // Remove file name from the path array so file can be deleted both from folder and file itself
     req.pathArray.pop();
     const url = req.pathArray.join("/");
+
+    const file = await query.getFileById(req.body.file_id);
+    if (!file) {
+        console.error("File not found in the database.");
+        return res.redirect(`/${url}`);
+    }
+
+    // Delete file from supabase
+    const { data, error } = await supabase.storage
+        .from("files")
+        .remove([`public/${file.hashedName}`]);
+    if (error) {
+        console.error("Error deleting file:", error);
+        return res.redirect(`/${url}`);
+    }
+    console.log("File deleted successfully!");
+
+    await query.deleteFile(req.body.file_id);
 
     // Redirect to driveGet
     return res.redirect(`/${url}`);
 });
 
 exports.changeFilePut = asyncHandler(async (req, res) => {
-    const prevFileName = decodeURIComponent(req.params.name);
     const newFileName = req.body.file_name;
     const fileId = req.body.file_id;
     const fileContent = req.body.file_content;
@@ -74,11 +93,16 @@ exports.changeFilePut = asyncHandler(async (req, res) => {
         return res.redirect(req.currentUrl);
     }
 
-    fs.writeFile(path.join(__dirname, "../uploads", file.hashedName), fileContent, (err) => {
-        if (err) {
-            console.error(err);
-        }
-    });
+    // Update file on supabase
+    const { error } = await supabase.storage
+        .from("files")
+        .update(`public/${file.hashedName}`, new Blob([fileContent]), {
+            contentType: "text/plain",
+        });
+    if (error) {
+        console.error("Error updating file in Supabase:", error);
+        return res.redirect(req.currentUrl);
+    }
 
     // Redirect to driveGet
     req.pathArray.pop();
@@ -88,20 +112,25 @@ exports.changeFilePut = asyncHandler(async (req, res) => {
     return res.redirect(`/${urlNewFile}`);
 });
 
-exports.downloadFileGet = asyncHandler(async (req, res, next) => {
+exports.downloadFilePost = asyncHandler(async (req, res, next) => {
     const fileId = req.body.file_id;
     const file = await query.getFileById(fileId);
     if (file) {
-        const filePath = path.join(__dirname, "../uploads", file.hashedName);
-        res.download(filePath, file.name, (err) => {
-            if (err) {
-                console.error(err);
-                res.status(500).send("Could not download the file.");
-            } else {
-                console.log("File downloaded successfully.");
-            }
+        // Get the public URL for the file from Supabase
+        const { data, error } = supabase.storage
+            .from("files")
+            .getPublicUrl(`public/${file.hashedName}`);
+        if (error) {
+            console.error("Error getting public URL:", error);
+            return res.status(500).send("Could not retrieve the file URL.");
+        }
+
+        const response = await axios.get(data.publicUrl);
+        res.set({
+            "Content-Disposition": `attachment; filename="${file.name}"`,
         });
-        return;
+
+        res.send(response.data);
     }
     next();
 });
@@ -110,19 +139,21 @@ exports.readFileGet = asyncHandler(async (req, res, next) => {
     const fileName = decodeURIComponent(req.params.name);
     const [file] = await query.getFileByName(fileName, req.fileFolderId);
     if (file) {
-        fs.readFile(path.join(__dirname, "../uploads", file.hashedName), "utf8", (err, data) => {
-            if (err) {
-                console.error(err);
-                return;
-            }
-            file.content = data;
-            const test = data.split("\n");
-            return res.render("drive", {
-                pathArray: req.pathArray,
-                file: file,
-            });
+        // Get file from supabase
+        const { data, error } = await supabase.storage
+            .from("files")
+            .download(`public/${file.hashedName}`);
+        if (error) {
+            console.error("Error downloading file from Supabase:", error);
+            return next(error);
+        }
+
+        const text = await data.text();
+        file.content = text;
+        return res.render("drive", {
+            pathArray: req.pathArray,
+            file: file,
         });
-        return;
     }
     next();
 });

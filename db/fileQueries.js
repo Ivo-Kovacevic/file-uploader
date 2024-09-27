@@ -2,20 +2,15 @@ const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 
-exports.uploadFile = async (name, hashedName, path, size, folderId) => {
+exports.storeFile = async (fileName, hashedName, path, size, folderId) => {
     try {
-        const existingFile = await prisma.file.findFirst({
-            where: {
-                name: name,
-                folderId: folderId,
-            },
-        });
+        const existingFile = await exports.fileExists(fileName, folderId);
         if (existingFile) {
             return "File with that name already exists";
         }
-        await prisma.file.create({
+        return await prisma.file.create({
             data: {
-                name: name,
+                name: fileName,
                 hashedName: hashedName,
                 path: path,
                 size: size,
@@ -34,16 +29,25 @@ exports.uploadFile = async (name, hashedName, path, size, folderId) => {
     }
 };
 
-exports.renameFile = async (fileName, fileId, folderId) => {
+exports.fileExists = async (fileName, folderId) => {
     try {
-        const existingFile = await prisma.file.findFirst({
+        return (existingFile = await prisma.file.findFirst({
             where: {
                 name: fileName,
                 folderId: folderId,
             },
-        });
+        }));
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
+
+exports.renameFile = async (fileName, fileId, folderId) => {
+    try {
+        const existingFile = await exports.fileExists(fileName, folderId);
         if (existingFile) {
-            return "File name already exists";
+            return "File with that name already exists";
         }
         return await prisma.file.update({
             where: {
@@ -56,6 +60,8 @@ exports.renameFile = async (fileName, fileId, folderId) => {
     } catch (error) {
         console.error(error);
         throw error;
+    } finally {
+        await prisma.$disconnect();
     }
 };
 
