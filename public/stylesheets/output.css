@@ -935,6 +935,10 @@ video {
   gap: 24rem;
 }
 
+.gap-2 {
+  gap: 0.5rem;
+}
+
 .space-x-4 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-x-reverse: 0;
   margin-right: calc(1rem * var(--tw-space-x-reverse));
@@ -1074,6 +1078,14 @@ video {
 
 .p-8 {
   padding: 2rem;
+}
+
+.p-6 {
+  padding: 1.5rem;
+}
+
+.p-0 {
+  padding: 0px;
 }
 
 .px-4 {
@@ -1329,6 +1341,10 @@ video {
     margin-bottom: 14rem;
   }
 
+  .sm\:mt-auto {
+    margin-top: auto;
+  }
+
   .sm\:flex {
     display: flex;
   }
@@ -1369,6 +1385,10 @@ video {
 
   .sm\:justify-center {
     justify-content: center;
+  }
+
+  .sm\:p-8 {
+    padding: 2rem;
   }
 
   .sm\:px-8 {

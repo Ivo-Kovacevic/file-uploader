@@ -18,7 +18,7 @@ document.querySelectorAll('a[href^="#"]').forEach((el) => {
             history.pushState(null, "", `#${id}`);
             // Scroll to the target using Lenis
             lenis.scrollTo(target.offsetTop, {
-                duration: 3,
+                duration: 1.2,
                 easing: (t) => t * (2 - t),
             });
         }
@@ -28,21 +28,21 @@ document.querySelectorAll('a[href^="#"]').forEach((el) => {
 // GSAP
 gsap.registerPlugin(ScrollTrigger);
 
-function heroAnimation(target, trigger) {
-    return gsap.to(target, {
-        x: 400,
-        opacity: 0,
-        scrollTrigger: {
-            trigger: trigger,
-            start: "top 20%",
-            end: "bottom top",
-            scrub: true,
-            markers: false,
-        },
-    });
-}
-heroAnimation(".hero", ".hero-trigger");
-heroAnimation(".arrow", ".arrow-trigger");
+// function heroAnimation(target, trigger) {
+//     return gsap.to(target, {
+//         x: 400,
+//         opacity: 0,
+//         scrollTrigger: {
+//             trigger: trigger,
+//             start: "top 20%",
+//             end: "bottom top",
+//             scrub: true,
+//             markers: false,
+//         },
+//     });
+// }
+// heroAnimation(".hero", ".hero-trigger");
+// heroAnimation(".arrow", ".arrow-trigger");
 
 function fadeInTechStack(target, trigger) {
     return gsap.from(target, {
@@ -51,8 +51,8 @@ function fadeInTechStack(target, trigger) {
         scrollTrigger: {
             trigger: trigger,
             start: "top 90%",
-            end: "bottom 70%",
-            scrub: true,
+            end: "bottom 50%",
+            scrub: false,
             markers: false,
         },
     });
