@@ -1,5 +1,5 @@
-<% if (locals.flashMessages) { %>
-    <% flashMessages.errors.forEach(error => { %>
+<% if (locals.folderValidation && folderValidation.length > 0) { %>
+    <% folderValidation.forEach(error => { %>
         <p class="text-red-700"><%= error.msg %></p>
     <% }) %>
 <% } %>

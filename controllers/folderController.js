@@ -10,7 +10,7 @@ exports.createFolderPost = [
 
         // Redirect if folder validation fails
         if (!errors.isEmpty()) {
-            req.flash("errors", errors.array());
+            req.flash("folderValidation", errors.array());
             return res.redirect(req.currentUrl);
         }
 
