@@ -27,7 +27,7 @@ exports.uploadFilePost = [
         // Upload file to supabase
         const { data, error } = await supabase.storage
             .from("files")
-            .upload(`public/${hashedName}`, file.buffer, {
+            .upload(newFile.path, file.buffer, {
                 cacheControl: "3600",
                 upsert: false,
             });
@@ -67,9 +67,7 @@ exports.deleteFileDelete = asyncHandler(async (req, res) => {
     }
 
     // Delete file from supabase
-    const { data, error } = await supabase.storage
-        .from("files")
-        .remove([`public/${file.hashedName}`]);
+    const { data, error } = await supabase.storage.from("files").remove([file.path]);
     if (error) {
         console.error("Error deleting file:", error);
         return res.redirect(`/${url}`);
@@ -96,7 +94,7 @@ exports.changeFilePut = asyncHandler(async (req, res) => {
     // Update file on supabase
     const { error } = await supabase.storage
         .from("files")
-        .update(`public/${file.hashedName}`, new Blob([fileContent]), {
+        .update(file.path, new Blob([fileContent]), {
             contentType: "text/plain",
         });
     if (error) {
@@ -117,9 +115,7 @@ exports.downloadFilePost = asyncHandler(async (req, res, next) => {
     const file = await query.getFileById(fileId);
     if (file) {
         // Get the public URL for the file from Supabase
-        const { data, error } = supabase.storage
-            .from("files")
-            .getPublicUrl(`public/${file.hashedName}`);
+        const { data, error } = supabase.storage.from("files").getPublicUrl(file.path);
         if (error) {
             console.error("Error getting public URL:", error);
             return res.status(500).send("Could not retrieve the file URL.");
@@ -140,9 +136,7 @@ exports.readFileGet = asyncHandler(async (req, res, next) => {
     const [file] = await query.getFileByName(fileName, req.fileFolderId);
     if (file) {
         // Get file from supabase
-        const { data, error } = await supabase.storage
-            .from("files")
-            .download(`public/${file.hashedName}`);
+        const { data, error } = await supabase.storage.from("files").download(file.path);
         if (error) {
             console.error("Error downloading file from Supabase:", error);
             return next(error);
