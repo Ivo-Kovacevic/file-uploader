@@ -52,4 +52,4 @@ app.use((req, res, next) => {
 app.use("/drive", driveRouter);
 app.use("/", indexRouter);
 
-app.listen(PORT, () => console.log(`App is live at port ${PORT}`));
+app.listen(PORT, "0.0.0.0", () => console.log(`App is live at port ${PORT}`));
